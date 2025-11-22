@@ -102,7 +102,12 @@ def make_key(question: str) -> str:
 
 QA_CACHE = load_cache()
 CACHE_TTL = 3600  # 1 hora de cache
-MAX_CACHE_SIZE = 100
+MAX_CACHE_SIZE = 200  # Más entradas en cache
+
+# Cache en memoria para respuestas ultra-rápidas
+MEMORY_CACHE = {}
+MEMORY_CACHE_SIZE = 50
+MEMORY_CACHE_TTL = 300  # 5 minutos
 
 def clean_expired_cache():
     """Limpia entradas expiradas del cache."""
@@ -142,11 +147,29 @@ def respond_and_cache(key: str, payload: dict):
 
 def get_cached_response(key: str):
     """Obtiene respuesta del cache si no ha expirado."""
+    # Primero revisar cache en memoria (más rápido)
+    if key in MEMORY_CACHE:
+        cached = MEMORY_CACHE[key]
+        now = int(time.time())
+        if now - cached.get('timestamp', now) <= MEMORY_CACHE_TTL:
+            response = {k: v for k, v in cached.items() if k not in ['timestamp']}
+            response['cached'] = True
+            response['cache_type'] = 'memory'
+            return response
+    
+    # Luego revisar cache en disco
     if key in QA_CACHE:
         cached = QA_CACHE[key]
         now = int(time.time())
         if now - cached.get('timestamp', now) <= CACHE_TTL:
             response = {k: v for k, v in cached.items() if k not in ['timestamp']}
+            # Copiar a cache en memoria para próxima consulta
+            if len(MEMORY_CACHE) < MEMORY_CACHE_SIZE:
+                memory_entry = cached.copy()
+                memory_entry['timestamp'] = now
+                MEMORY_CACHE[key] = memory_entry
+            response['cached'] = True
+            response['cache_type'] = 'disk'
             return response
         else:
             QA_CACHE.pop(key, None)
@@ -321,9 +344,11 @@ def procesar_documento(file_path, filename=""):
         print("🔢 Generando embeddings optimizados...")
         embeddings = OpenAIEmbeddings(
             api_key=OPENAI_KEY,
-            chunk_size=500,  # Reducir tamaño de lote para mayor velocidad
-            max_retries=2,   # Reducir reintentos para mayor velocidad
-            request_timeout=10  # Timeout más corto
+            chunk_size=1000,  # Aumentar para menos llamadas API
+            max_retries=1,    # Solo un reintento para mayor velocidad
+            request_timeout=8,  # Timeout más agresivo
+            show_progress_bar=False,  # Sin progreso para mayor velocidad
+            skip_empty=True   # Saltar chunks vacíos
         )
         
         # Crear o actualizar vector DB
@@ -590,16 +615,18 @@ def chat():
                 print(f"🚀 Respuesta desde cache para: {user_text[:50]}...")
                 return jsonify(cached_response)
 
-            # obtener documentos relevantes con score optimizado desde FAISS
-            # si es una petición de aclaración, aumentar k para recuperar más contexto
-            k = 8 if is_clarify else 4
+            # obtener documentos relevantes con score optimizado para velocidad
+            search_start = time.time()
+            k = 6 if is_clarify else 3  # Reducir k para mayor velocidad
             # results devuelve una lista de tuplas (Document, score)
             results = vector_db.similarity_search_with_score(user_text, k=k)
+            search_time = time.time() - search_start
+            print(f"🔍 Búsqueda vectorial completada en {search_time:.3f}s")
             
-            # Filtrar resultados por score de relevancia (menor score = más relevante)
-            filtered_results = [(d, s) for d, s in results if s < 1.0]  # Solo resultados relevantes
+            # Filtrar resultados por score de relevancia más estricto (menor score = más relevante)
+            filtered_results = [(d, s) for d, s in results if s < 0.8]  # Umbral más estricto
             if not filtered_results:
-                filtered_results = results[:2]  # Al menos 2 resultados como fallback
+                filtered_results = results[:1]  # Solo el mejor resultado como fallback
             
             # Comprimir contexto eliminando redundancias
             seen_content = set()
@@ -835,6 +862,40 @@ def history():
 
 
 # ==========================================================
+# 🏎️ OPTIMIZACIONES DE INICIALIZACIÓN
+# ==========================================================
+def optimize_system_startup():
+    """Optimiza el sistema al iniciar para respuestas más rápidas."""
+    try:
+        print("🏎️ Optimizando sistema para máxima velocidad...")
+        
+        # Pre-cargar vector DB si existe
+        global VECTOR_DB
+        if VECTOR_DB is None:
+            load_vector_db_if_needed()
+        
+        # Test de conectividad OpenAI rápido
+        if OPENAI_KEY:
+            try:
+                test_response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": "Hi"}],
+                    max_tokens=5,
+                    timeout=5
+                )
+                print("✅ OpenAI optimizado para baja latencia")
+            except Exception as e:
+                print(f"⚠️ Advertencia OpenAI: {e}")
+        
+        # Limpiar cache viejo al inicio
+        clean_expired_cache()
+        
+        print("🚀 Sistema optimizado - listo para respuestas rápidas")
+        
+    except Exception as e:
+        print(f"⚠️ Error en optimización: {e}")
+
+# ==========================================================
 # 🚀 EJECUTAR SERVIDOR
 # ==========================================================
 if __name__ == "__main__":
@@ -844,5 +905,8 @@ if __name__ == "__main__":
     
     print(f"🚀 Iniciando Alana Legal Sense en puerto {port}")
     print(f"🔧 Modo debug: {debug_mode}")
+    
+    # Optimizar sistema al inicio
+    optimize_system_startup()
     
     app.run(host="0.0.0.0", port=port, debug=debug_mode)

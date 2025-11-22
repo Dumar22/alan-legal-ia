@@ -12,7 +12,14 @@ form.addEventListener("submit", async (e) => {
   appendMessage("Tú", text, "user");
   input.value = "";
 
-  appendMessage("Bot", "…procesando", "bot loading");
+  // Animación de carga mejorada con puntos animados
+  const loadingId = Date.now();
+  appendMessage("Bot", "<span class='loading-dots'>Procesando<span class='dots'></span></span>", "bot loading", "", loadingId);
+  
+  // Iniciar animación de puntos
+  startLoadingAnimation();
+  
+  const startTime = Date.now();
   const response = await fetch("/chat", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -20,21 +27,38 @@ form.addEventListener("submit", async (e) => {
   });
 
   const data = await response.json();
+  const responseTime = Date.now() - startTime;
+  
+  // Detener animación de carga
+  clearInterval(loadingInterval);
+  
   // quitar el mensaje de loading anterior
   removeLoadingMessages();
   
   // Detectar si la respuesta viene del cache
   const isCached = data.cached === true;
+  const cacheType = data.cache_type || 'new';
+  
+  // Mostrar respuesta principal con indicador de cache y velocidad
+  let speedIcon = "";
+  if (isCached) {
+    speedIcon = cacheType === 'memory' ? " ⚡" : " 🚀";
+  } else if (responseTime < 2000) {
+    speedIcon = " ⚡";
+  }
+  
+  appendMessage("Bot", data.response || "(sin respuesta)", "bot", speedIcon);
 
-  // Mostrar respuesta principal con indicador de cache si aplica
-  const cacheIcon = isCached ? " 🚀" : "";
-  appendMessage("Bot", data.response || "(sin respuesta)", "bot", cacheIcon);
-
-  // Mostrar tiempo de respuesta si está disponible
-  if (data.response_time) {
+  // Mostrar tiempo de respuesta con indicador de velocidad
+  if (data.response_time || responseTime) {
     const timeDiv = document.createElement("div");
     timeDiv.className = "response-time";
-    timeDiv.innerHTML = `⚡ Tiempo de respuesta: ${data.response_time}`;
+    const displayTime = data.response_time || `${(responseTime/1000).toFixed(2)}s`;
+    const speedClass = (parseFloat(displayTime) < 2) ? "fast" : (parseFloat(displayTime) < 5) ? "medium" : "slow";
+    const speedIcon = speedClass === "fast" ? "⚡" : speedClass === "medium" ? "🚀" : "⏳";
+    
+    timeDiv.innerHTML = `${speedIcon} Tiempo: ${displayTime} ${isCached ? '(cache)' : ''}`;
+    timeDiv.className = `response-time ${speedClass}`;
     messages.appendChild(timeDiv);
   }
 
@@ -139,13 +163,35 @@ form.addEventListener("submit", async (e) => {
   messages.scrollTop = messages.scrollHeight;
 });
 
-function appendMessage(who, text, cls, isCached = false) {
+// Variables para animación de carga
+let loadingInterval;
+
+function startLoadingAnimation() {
+  let dotCount = 0;
+  loadingInterval = setInterval(() => {
+    const dotsElement = document.querySelector('.loading-dots .dots');
+    if (dotsElement) {
+      dotCount = (dotCount + 1) % 4;
+      dotsElement.textContent = '.'.repeat(dotCount);
+    } else {
+      clearInterval(loadingInterval);
+    }
+  }, 500);
+}
+
+function appendMessage(who, text, cls, isCached = false, messageId = null) {
   const el = document.createElement("div");
   el.className = `msg ${cls}`;
+  if (messageId) el.dataset.messageId = messageId;
   
   // Crear contenido con indicador de cache si aplica
   const cacheIndicator = isCached ? ' 🚀' : '';
-  el.textContent = `${who}${cacheIndicator}: ${text}`;
+  
+  if (cls.includes('loading')) {
+    el.innerHTML = `${who}: <span class='loading-dots'>${text}<span class='dots'></span></span>`;
+  } else {
+    el.textContent = `${who}${cacheIndicator}: ${text}`;
+  }
   
   messages.appendChild(el);
   messages.scrollTop = messages.scrollHeight;
@@ -294,14 +340,32 @@ uploadForm.addEventListener("submit", async (e) => {
   progressText.textContent = 'Iniciando...';
   
   try {
-    // Simular progreso durante la subida
+    // Animación de progreso más fluida y realista
+    let progress = 0;
+    let step = 0;
+    const progressSteps = [
+      'Subiendo archivos...',
+      'Extrayendo texto...',
+      'Procesando contenido...',
+      'Generando embeddings...',
+      'Creando índices...'
+    ];
+    
     const progressInterval = setInterval(() => {
-      const currentWidth = parseFloat(progressFill.style.width) || 0;
-      if (currentWidth < 90) {
-        progressFill.style.width = (currentWidth + 10) + '%';
-        progressText.textContent = `Procesando archivos... ${Math.round(currentWidth + 10)}%`;
+      if (progress < 85) {
+        progress += Math.random() * 12 + 3; // Progreso más variable y realista
+        if (progress > 85) progress = 85;
+        progressFill.style.width = progress + '%';
+        
+        // Cambiar mensaje según progreso
+        const newStep = Math.floor(progress / 20);
+        if (newStep !== step && newStep < progressSteps.length) {
+          step = newStep;
+        }
+        
+        progressText.textContent = `${progressSteps[step]} ${Math.round(progress)}%`;
       }
-    }, 200);
+    }, 250);
     
     const response = await fetch("/upload", {
       method: "POST",
