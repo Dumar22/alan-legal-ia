@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot Inteligente</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div id="chatbox">
+    <div class="top-row">
+      <div class="uploader">
+        <h3>📄 Cargar documento</h3>
+        <form id="uploadForm" enctype="multipart/form-data">
+          <input type="file" id="fileInput" name="file" accept=".pdf,.txt,.docx" />
+          <button type="submit">Subir</button>
+        </form>
+        <div id="uploadStatus" class="status"></div>
+      </div>
+      <div class="info">
+        <h2>🤖 Chatbot</h2>
+        <div class="meta">
+          <div id="confidenceBadge" class="badge">Confianza: —</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="messages" class="messages"></div>
+
+    <form id="chatForm" class="chat-form">
+      <input type="text" id="userInput" placeholder="Escribe tu mensaje..." autocomplete="off" />
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div id="sourcesContainer" class="sources">
+      <h4>Fuentes</h4>
+      <div id="sourcesList"></div>
+    </div>
+  </div>
+
+   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

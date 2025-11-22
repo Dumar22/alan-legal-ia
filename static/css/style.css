@@ -1,0 +1,71 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f4f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+#chatbox {
+  background: white;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.uploader { flex: 1; }
+.info { width: 220px; }
+
+#messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  max-height: 50vh;
+  padding-right: 8px;
+}
+
+.msg { margin: 8px 0; padding: 8px 10px; border-radius: 8px; }
+.user { text-align: right; background: #e8f0ff; align-self: flex-end; color: #0b3d91; }
+.bot { text-align: left; background: #f0fff4; align-self: flex-start; color: #0b6b3d; }
+.loading { opacity: 0.7; }
+
+.chat-form { display: flex; gap: 8px; }
+.chat-form input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+}
+.chat-form button { padding: 10px 14px; border-radius: 10px; border: none; background: #2563eb; color: white; }
+
+.sources { margin-top: 12px; }
+.source-item { border-left: 3px solid #eee; padding: 8px 12px; margin-bottom: 8px; background: #fafafa; border-radius: 6px; }
+.source-header { font-size: 13px; color: #333; margin-bottom: 6px; }
+.source-snippet { font-size: 13px; color: #555; white-space: pre-wrap; }
+.no-sources { color: #777; font-style: italic; }
+
+.badge { display: inline-block; padding: 6px 8px; border-radius: 8px; background: #f3f4f6; color: #111; font-weight: 600; }
+.badge.alta { background: #d1fae5; color: #065f46; }
+.badge.media { background: #fef3c7; color: #92400e; }
+.badge.baja { background: #fee2e2; color: #991b1b; }
+
+@media (max-width: 640px) {
+  .top-row { flex-direction: column; align-items: stretch; }
+  .info { width: 100%; }
+  #chatbox { padding: 12px; }
+  .source-snippet { font-size: 12px; }
+}

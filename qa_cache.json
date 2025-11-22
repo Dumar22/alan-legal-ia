@@ -1,0 +1,42 @@
+{
+  "b081baace6c2a816eeb7af86ade838ef22068790bcdcd6d1c4c758ff34ab3788": {
+    "response": "NO_ENCONTRADO",
+    "sources": [],
+    "confidence": "baja",
+    "evidence": [],
+    "timestamp": 1763832297
+  },
+  "fc1cdf0357c6f4bf415f2ddaf47e1faead740db51af1a363b806bb9acb784104": {
+    "response": "NO_ENCONTRADO",
+    "sources": [],
+    "confidence": "baja",
+    "evidence": [],
+    "timestamp": 1763832321
+  },
+  "181eb3b75a707da4c6d7f9329ea7e3e964800f54c538280ca82fa42f53edffee": {
+    "response": "El documento hace referencia a un contrato de prestación de servicios profesionales de abogado entre Azucena Salazar Betancur y Juan José Echeverry Franco.",
+    "sources": [],
+    "confidence": "alta",
+    "evidence": [
+      "Entre: AZUCENA SALAZAR BETANCUR... y JUAN JOSÉ ECHEVERRY FRANCO, mayor de edad, identificado con cédula No. 1.053.841.705 de Manizales...",
+      "celebran el presente contrato bajo las siguientes cláusulas:"
+    ],
+    "timestamp": 1763832443
+  },
+  "117c0e38c2f160d6beb86e534ca24f789175ccfab5d6d13701e2eb129bba967e": {
+    "response": "3.500.000 pesos",
+    "sources": [],
+    "confidence": "alta",
+    "evidence": [
+      "LA MANDANTE pagará a EL APODERADO la suma total de TRES MILLONES QUINIENTOS MIL PESOS ($3.500.000) por los servicios prestados."
+    ],
+    "timestamp": 1763832454
+  },
+  "2302873f91311ad0b1b0c7f68c9a31810b40a73cb842566b0a74b6998fd7dc80": {
+    "response": "NO_ENCONTRADO",
+    "sources": [],
+    "confidence": "baja",
+    "evidence": [],
+    "timestamp": 1763832512
+  }
+}
