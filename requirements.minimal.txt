@@ -1,0 +1,31 @@
+# Minimal requirements for Alana Legal Sense - Production Ready
+# Core Web Framework
+Flask==3.1.2
+gunicorn==23.0.0
+
+# AI and Document Processing
+openai==1.54.4
+langchain-openai==0.2.8
+langchain-core==0.3.18
+langchain-text-splitters==0.3.2
+faiss-cpu==1.8.0
+
+# Document Processing
+pypdf==6.3.0
+python-docx==1.2.0
+
+# Database and Storage  
+supabase==2.24.0
+
+# Essential Dependencies
+python-dotenv==1.2.1
+requests==2.32.5
+numpy==1.24.4
+pandas==2.0.3
+
+# Security
+cryptography==46.0.3
+
+# Core Python Support
+packaging==25.0
+typing_extensions==4.15.0
