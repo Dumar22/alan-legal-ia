@@ -3,6 +3,49 @@ const input = document.getElementById("userInput");
 const messages = document.getElementById("messages");
 const sourcesList = document.getElementById("sourcesList");
 const confidenceBadge = document.getElementById("confidenceBadge");
+const micBtn = document.getElementById('micBtn');
+
+// Speech Recognition setup (browser)
+let recognition = null;
+let recognizing = false;
+if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'es-ES';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    input.value = transcript;
+    // submit automatically
+    form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+  };
+
+  recognition.onend = () => {
+    recognizing = false;
+    if (micBtn) micBtn.classList.remove('listening');
+  };
+}
+
+if (micBtn) {
+  micBtn.addEventListener('click', () => {
+    if (!recognition) {
+      alert('Tu navegador no soporta reconocimiento por voz.');
+      return;
+    }
+
+    if (recognizing) {
+      recognition.stop();
+      micBtn.classList.remove('listening');
+      recognizing = false;
+    } else {
+      recognition.start();
+      micBtn.classList.add('listening');
+      recognizing = true;
+    }
+  });
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -29,6 +72,25 @@ form.addEventListener("submit", async (e) => {
   // Mostrar respuesta principal con indicador de cache si aplica
   const cacheIcon = isCached ? " 🚀" : "";
   appendMessage("Bot", data.response || "(sin respuesta)", "bot", cacheIcon);
+
+  // Reproducir respuesta en audio (SpeechSynthesis)
+  if (data.response && 'speechSynthesis' in window) {
+    try {
+      const utter = new SpeechSynthesisUtterance(data.response);
+      utter.lang = 'es-ES';
+      // elegir voz preferida si existe
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length) {
+        // preferir voces que incluyan 'Spanish' o 'es'
+        const v = voices.find(v => /es|spanish/i.test(v.name) || /es/i.test(v.lang));
+        if (v) utter.voice = v;
+      }
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    } catch (e) {
+      console.warn('Error en síntesis de voz:', e);
+    }
+  }
 
   // Mostrar tiempo de respuesta si está disponible
   if (data.response_time) {
@@ -142,11 +204,23 @@ form.addEventListener("submit", async (e) => {
 function appendMessage(who, text, cls, isCached = false) {
   const el = document.createElement("div");
   el.className = `msg ${cls}`;
-  
-  // Crear contenido con indicador de cache si aplica
+
   const cacheIndicator = isCached ? ' 🚀' : '';
-  el.textContent = `${who}${cacheIndicator}: ${text}`;
-  
+
+  // If this is a loading message, build structured content with typing animation
+  if (cls && cls.indexOf('loading') !== -1) {
+    el.innerHTML = `
+      <strong>${escapeHtml(who)}${cacheIndicator}:</strong>
+      <div class="content">
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    `;
+  } else {
+    el.innerHTML = `<strong>${escapeHtml(who)}${cacheIndicator}:</strong> <div class="content">${escapeHtml(text)}</div>`;
+  }
+
   messages.appendChild(el);
   messages.scrollTop = messages.scrollHeight;
 }

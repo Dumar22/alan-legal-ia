@@ -1,156 +1,165 @@
 {
-  "c9d352e14c2b21176a6303715a12ce3f3b9428bc323d4591fd9d968b309aed9b": {
-    "response": "Los archivos mencionados en el contexto son documentos legales en formato PDF o TXT que están destinados a ser cargados en un sistema que permite su indexación y análisis. Este sistema busca democratizar el acceso a la información legal, facilitando la búsqueda y comprensión de contenido jurídico por parte de los usuarios, independientemente de su nivel técnico. Se enfatiza que el objetivo es construir un asistente legal inteligente que reciba preguntas en lenguaje natural y proporcione respuestas fundamentadas basadas en el contenido de estos documentos cargados.",
-    "sources": [],
-    "confidence": "alta",
-    "evidence": [
-      "Archivos legales usados (PDF o TXT), claramente identificados.",
-      "El reto busca demostrar cómo un modelo de IA bien entrenado y un sistema de búsqueda semántica pueden democratizar el acceso a la información legal, reduciendo tiempos de análisis y errores interpretativos.",
-      "Desarrollar un prototipo funcional (MVP) de un asistente legal inteligente, que permita cargar uno o varios documentos legales y realizar preguntas en lenguaje natural."
-    ],
-    "cross_references": [
-      "El objetivo específico del reto se relaciona con la carga e indexación de documentos."
-    ],
-    "timestamp": 1763838165
-  },
-  "c0988e1a3628cf9b155b082fab4850a8e6b8777b1fc533de9047837d4acec806": {
-    "response": "El archivo de contrato se refiere a un acuerdo de prestación de servicios profesionales entre Azucena Salazar Betancur, identificada como 'LA MANDANTE', y Juan José Echeverry Franco, identificado como 'EL APODERADO'. Este contrato incluye términos sobre la confidencialidad de la información intercambiada, causales y efectos de la terminación anticipada del contrato, condiciones de mora y cobros judiciales, procedimientos de notificación, y la aceptación del contrato a través de un mensaje de WhatsApp o el primer pago. Se establece que el contrato tiene carácter de mérito ejecutivo, lo que significa que es válido ante un juez en caso de incumplimiento. Las firmas del contrato se recogen en Manizales a finales de abril de 2025.",
-    "sources": [],
-    "confidence": "alta",
-    "evidence": [
-      "Ambas partes se comprometen a mantener reserva absoluta sobre toda la información intercambiada, incluso después de finalizado el contrato.",
-      "LA MANDANTE pagará el 100% de los honorarios pactados.",
-      "Este contrato tiene mérito ejecutivo y podrá hacerse valer ante un juez en caso de incumplimiento."
-    ],
-    "cross_references": [
-      "La séptima sección sobre confidencialidad se relaciona con la primera sección que establece las partes del contrato.",
-      "La octava sección sobre terminación anticipada se relaciona con la décima primera sección sobre el mérito ejecutivo."
-    ],
-    "timestamp": 1763838217
-  },
-  "d82ff29139e824e05f270c48d2aa81a730fc66027f7a25189ea8c8e77f12d339": {
-    "response": "No hay información específica sobre el archivo de demanda, pero se han presentado pruebas documentales relacionadas con el caso, como el registro civil de defunción de FRANCISCO JAVIER LONDOÑO ESCALANTE y un certificado de libertad y tradición del bien inmueble. Si necesitas detalles específicos sobre el contenido del archivo de demanda, por favor reformula tu pregunta considerando qué aspectos quieres explorar.",
-    "sources": [],
-    "confidence": "baja",
-    "evidence": [
-      "Registro civil de defunción del señor FRANCISCO JAVIER LONDOÑO ESCALANTE.",
-      "Certificado de libertad y tradición del bien inmueble objeto del presente proceso, tanto ordinario como especial.",
-      "Plano topográfico de los predios propiedad de la demandante"
-    ],
-    "cross_references": [],
-    "timestamp": 1763838240
-  },
-  "33945fb31479a5cfbebef367a54c30a0830a59049f13ae98b44a6cc514c9ecfc": {
-    "response": "La demanda está relacionada con la propiedad de un predio rural que es objeto de derechos de dominio y posesión por parte de la demandante. Esta sostiene haber ejercido un uso efectivo y permanente del bien, además de haber realizado inversiones económicas en su mantenimiento, aunque no cuente con pruebas documentales de todos los gastos. La declaración de testigos, como Alberto Henao Jaramillo, es solicitada para verificar los hechos relevantes de la demanda. También se menciona que, en caso de presentarse personas que reclamen herencia del señor Francisco Javier Londoño Escalante, se solicitará su comparecencia para resolver derechos sobre la cuota parte del bien.",
-    "sources": [],
-    "confidence": "alta",
-    "evidence": [
-      "la demandante ha arrendado en diversas",
-      "Dicho uso constituye una manifestación clara, efectiva y permanente de su señorío sobre el bien",
-      "ha sufragado en su totalidad, con recursos propios, el valor del impuesto predial correspondiente al inmueble"
-    ],
-    "cross_references": [
-      "La necesidad de citar testigos se relaciona con los hechos mencionados en la demanda."
-    ],
-    "timestamp": 1763838274
-  },
-  "e1653bac6190f30aac5b334043bc379ce7874ba6f072d3728fe2737e15a5e440": {
-    "response": "El contrato establece los términos de honorarios y condiciones de pago entre LA MANDANTE y EL APODERADO, especificando un total de $3.500.000 en seis cuotas bimestrales. La demanda se centra en la pretensión de adjudicar el 50% del dominio de un bien inmueble a AZUCENA SALAZAR BETANCUR mediante prescripción adquisitiva, argumentando la posesión continua y pacífica. Ambos documentos abordan aspectos legales de derechos sobre propiedades y las compensaciones económicas asociadas.",
+  "9d7576e55e8a3d0d5c7c7ee110245f9171eb2cfe75506dd2dd1937c5b6c22e5f": {
+    "response": "El archivo se refiere a un contexto legal relacionado con la propiedad de terrenos en Nariño, Antioquia, adjudicados a Azucena Salazar Betancur tras la sucesión de Mario Jaramillo Gómez. Detalla aspectos del arrendamiento del predio para actividades ganaderas, la tradición del inmueble, su matrícula inmobiliaria y sus avaluos catastrales.",
     "key_points": [
-      "Honorarios de $3.500.000, pagaderos en seis cuotas bimestrales de $500.000 (Art. Segunda)",
-      "La demanda busca declarar a AZUCENA como dueña del 50% por prescripción adquisitiva (Sección V)",
-      "Compromisos de confidencialidad y condiciones de terminación del contrato correctamente gestionados (Secciones Séptima y Octava)"
-    ],
-    "specific_articles": [
-      "Art. Segunda",
-      "Sección V",
-      "Sección Séptima",
-      "Sección Octava"
-    ],
-    "exact_quotes": [
-      "\"LA MANDANTE pagará a EL APODERADO la suma total de TRES MILLONES QUINIENTOS MIL PESOS ($3.500.000) por los servicios prestados\"",
-      "\"ruego a su señoría acceder a las siguientes pretensiones: ADJUDICAR y DECLARAR dueña del 50% del dominio\""
-    ],
-    "sources": [
-      {
-        "text_snippet": "demandas, recursos y actuaciones procesales necesarias. \nSEGUNDA: HONORARIOS \nLA MANDANTE pagará a EL APODERADO la suma total de  TRES MILLONES \nQUINIENTOS MIL PESOS ($3.500.000)  por los servicios prestados, distribuidos \nasí: \n• $500.000 al firmar el contrato (anticipo). \n• **3.000.000∗∗en∗∗6cuotasbimestrales∗∗de3.000.000∗∗en∗∗6cuotasbimestra\nles∗∗de500.000 cada una. \nParágrafo 1: El pago se realizará mediante transferencia bancaria a la cuenta \ndesignada por EL APODERADO.  \nParágrafo 2: Como ",
-        "source": "Contrato.pdf",
-        "page": 0,
-        "score": 0.31641173362731934
-      },
-      {
-        "text_snippet": "JUAN JOSÉ ECHEVERRY FRANCO  \n  ABOGADO  \nUNIVERSIDAD DE CALDAS  \nLa explotación económica del bien inmueble en la que ha incurrido mi representada \nse hace evidente con los contratos verbales de arrendamiento que ha celebrado, en \nmúltiples ocasiones.  \n \nV. PRETENSIONES \nCon toda deferencia y respeto, ruego a su señoría acceder a las siguientes \npretensiones: \n \nPRIMERO: ADJUDICAR y DECLARAR dueña del 50% del dominio que se \nencuentra en común y proindiviso en cabeza del señor FRANCISCO JAVIER ",
-        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
-        "page": 6,
-        "score": 0.3214397430419922
-      },
-      {
-        "text_snippet": "SÉPTIMA: CONFIDENCIALIDAD \nAmbas partes se comprometen a mantener  reserva absoluta  sobre toda la \ninformación intercambiada, incluso después de finalizado el contrato. \nOCTAVA: TERMINACIÓN ANTICIPADA \n1. Causales: Incumplimiento grave, fuerza mayor o mutuo acuerdo. \n2. Efectos: LA MANDANTE pagará el 100% de los honorarios pactados. \nNOVENA: MORA Y COBROS JUDICIALES \n1. LA MANDANTE entrará en mora automáticamente si no paga en los plazos \nacordados. \n2. En caso de cobro judicial, LA MANDANTE as",
-        "source": "Contrato.pdf",
-        "page": 1,
-        "score": 0.32591742277145386
-      },
-      {
-        "text_snippet": "DÉCIMA: NOTIFICACIONES \n• LA MANDANTE: Teléfono/correo electrónico (por definir). \n• EL APODERADO: (Datos de contacto por definir). \n(Incluir datos actualizados al firmar). \nDÉCIMA PRIMERA: MÉRITO EJECUTIVO \nEste contrato tiene mérito ejecutivo y podrá hacerse valer ante un juez en caso de \nincumplimiento. \nDÉCIMA SEGUNDA: ACEPTACIÓN \nEl contrato se considerará firmado cuando: \n1. LA MANDANTE envíe un mensaje de WhatsApp aceptando los términos (con \nnombre, cédula y texto explícito). \n2. O cuand",
-        "source": "Contrato.pdf",
-        "page": 2,
-        "score": 0.33105945587158203
-      }
-    ],
-    "confidence": "alta",
-    "cross_references": [
-      "La sección de honorarios (Art. Segunda) se relaciona con la sección de mora y cobros judiciales (Sección Novena), ya que la falta de pago puede generar gastos adicionales."
-    ],
-    "missing_info": "No se presentan detalles adicionales sobre la defensa o puntos de la demanda que podrían ser relevantes.",
-    "response_time": "10.29s",
-    "timestamp": 1763839345,
-    "cached": true
-  },
-  "470e396d25f39c6f2e7c2f60405d513fda16277904e04ba0944aa80047aa5704": {
-    "response": "El archivo aborda diversas cuestiones legales relacionadas con la posesión y el dominio de un predio destinado a la actividad ganadera, arrendado por la parte demandada. Se menciona que el área arrendada es de 7 hectáreas y que la señora Azucena ostenta un 50% del dominio de otro predio mayor, señalando una vinculación entre ambos. Asimismo, se establece que la parte demandante ha ejercido posesión del bien por más de dos décadas, lo que puede ser relevante en una posible acción de usucapión.",
-    "key_points": [
-      "La parte demandante ha arrendado el predio destinado al engorde ganadero, 'conoce de primera mano el ejercicio posesorio y la destinación productiva del bien'.",
-      "El área arrendada de 7 hectáreas colinda con otros lotes adquiridos por Azucena, que posee un 50% de dominio sobre un segundo predio mayor según matrícula No. 028-8888.",
-      "La señora Azucena ha ejercido la posesión del bien por más de dos décadas, 'constituyendo una manifestación adicional de su ánimo de señor y dueña sobre el bien'."
+      "El inmueble fue adjudicado a Azucena Salazar Betancur mediante escritura pública número 2.061 del 20 de octubre de 1995, en la Notaría Quinta de Manizales.",
+      "El predio posee matrícula inmobiliaria No. 028-0016030, avaluado en $77.426.000 por la alcaldía de Nariño.",
+      "El archivo menciona que el arrendatario tiene experiencia en el uso del inmueble para engorde y explotación ganadera."
     ],
     "specific_articles": [],
     "exact_quotes": [
-      "'conoce de primera mano el ejercicio posesorio y la destinación productiva del bien'",
-      "'constituyendo una manifestación adicional de su ánimo de señor y dueña sobre el bien'"
+      "el número de matrícula 028-0016030",
+      "adjudicado a la señora AZUCENA SALAZAR BETANCUR, a través de la SUCESIÓN del causante MARIO JARAMILLO GÓMEZ"
     ],
     "sources": [
       {
         "text_snippet": "que ha sido la persona a quien mi representada ha arrendado en diversas \noportunidades el predio objeto de esta acción, para su destinación al engorde \ny explotación ganadera, p or lo cual conoce de primera mano el ejercicio \nposesorio y la destinación productiva del bien. No cuenta con correo \nelectrónico.",
         "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
         "page": 7,
-        "score": 0.46903955936431885
+        "score": 0.4705173373222351
       },
       {
-        "text_snippet": "anexo con color naranja y denominado como Área de 7 hectáreas , con matrícula \ninmobiliaria No. 028 -16030— colinda con otros lotes adquiridos dentro del mismo \nproceso sucesoral por la señora AZUCENA y sus dos hijos. Entre ellos se encuentra \nel predio con mayor área de extensión , identificado con el número de matrícula \ninmobiliaria No. 028 -8888 y señalado en el plano con color salmón (o rosado), \ncorrespondiente al Área 483200100000900047. Sobre este predio, la señora \nAzucena ostenta el 50",
+        "text_snippet": "el número de matrícula 028-0016030.  \nLA TRADICIÓN: el anterior inmueble fue adjudicado a la señora AZUCENA \nSALAZAR BETANCUR, a través de la SUCESIÓN del causante MARIO \nJARAMILLO GÓMEZ , mediante escritura pública número 2.061 del 2 0 de \noctubre de 1995 otorgada en la Notaría Quinta del Círculo de Manizales.  \nAVALÚO: Se encuentra avaluado catastralmente en la suma de SETENTA Y SIETE \nMILLONES CUATROCIENTOS VEINTISÉIS MIL PESOS ($77.426.000), según \nconsta por certificación expedida por la al",
         "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
-        "page": 3,
-        "score": 0.4691426753997803
+        "page": 1,
+        "score": 0.47935253381729126
       },
       {
         "text_snippet": "CONTRATO DE PRESTACIÓN DE SERVICIOS PROFESIONALES DE \nABOGADO \nEntre: \nAZUCENA SALAZAR BETANCUR, mayor de edad, identificada con cédula de \nciudadanía No.  32.537.262 de Manizales, domiciliada en dicha ciudad, en \nadelante \"LA MANDANTE\"; y \nJUAN JOSÉ ECHEVERRY FRANCO, mayor de edad, identificado con cédula \nNo. 1.053.841.705 de Manizales, titular de la Tarjeta Profesional de Abogado \nNo. 374.254 del Consejo Superior de la Judicatura, domiciliado en Manizales, en \nadelante \"EL APODERADO\". \nAmbas ",
         "source": "Contrato.pdf",
         "page": 0,
-        "score": 0.4716871678829193
+        "score": 0.4804713726043701
       },
       {
-        "text_snippet": "ostentado tanto el derec ho de dominio como la posesión material del mismo, por \nmás de dos décadas. Este hecho constituye una manifestación adicional de su \nánimo de señor y dueña sobre el bien. \n \nDE LA EXPLOTACIÓN ECONÓMICA DE LA DEMANDANTE SOBRE EL BIEN \nQUE SE PRETENDE USUCAPIR",
+        "text_snippet": "anexo con color naranja y denominado como Área de 7 hectáreas , con matrícula \ninmobiliaria No. 028 -16030— colinda con otros lotes adquiridos dentro del mismo \nproceso sucesoral por la señora AZUCENA y sus dos hijos. Entre ellos se encuentra \nel predio con mayor área de extensión , identificado con el número de matrícula \ninmobiliaria No. 028 -8888 y señalado en el plano con color salmón (o rosado), \ncorrespondiente al Área 483200100000900047. Sobre este predio, la señora \nAzucena ostenta el 50",
         "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
-        "page": 5,
-        "score": 0.474257230758667
+        "page": 3,
+        "score": 0.4820346236228943
       }
     ],
     "confidence": "alta",
     "cross_references": [
-      "La relación entre el arrendamiento del predio y la propiedad dual de Azucena sobre su otro predio, lo que puede afectar la usucapión."
+      "La relación entre la escritura pública de sucesión y el contrato de arrendamiento implica la continuación del uso del predio por parte de Azucena Salazar."
     ],
-    "missing_info": "No se detallan artículos específicos relevantes para el contexto de usucapión o dominio.",
-    "response_time": "9.82s",
-    "timestamp": 1763840146,
+    "missing_info": "",
+    "response_time": "24.03s",
+    "timestamp": 1763844625,
+    "cached": true
+  },
+  "8d92523e17e0184eeed080ded59b5f9e870e5514e936f862bee8d9567f6da765": {
+    "response": "El archivo trata sobre un proceso sucesoral relacionado con un inmueble de 7 hectáreas, cuya matrícula inmobiliaria es No. 028-16030, que colinda con propiedades adquiridas por Azucena Salazar Betancur y sus hijos. También se aborda el contrato de prestación de servicios profesionales entre Azucena y el abogado Juan José Echeverry Franco. Se menciona la tradición del inmueble adjudicada mediante escritura pública a Azucena y su avalúo catastral.",
+    "key_points": [
+      "El área de 7 hectáreas, matrícula No. 028-16030, colinda con otros lotes del proceso sucesoral.",
+      "Azucena posee el 50% del derecho de dominio del predio identificado como matrícula No. 028-8888.",
+      "El inmueble ha sido arrendado repetidamente para uso ganadero."
+    ],
+    "specific_articles": [],
+    "exact_quotes": [
+      "LA TRADICIÓN: el anterior inmueble fue adjudicado a la señora AZUCENA SALAZAR BETANCUR, a través de la SUCESIÓN del causante MARIO JARAMILLO GÓMEZ.",
+      "Se encuentra avaluado catastralmente en la suma de SETENTA Y SIETE MILLONES CUATROCIENTOS VEINTISÉIS MIL PESOS ($77.426.000)."
+    ],
+    "sources": [
+      {
+        "text_snippet": "anexo con color naranja y denominado como Área de 7 hectáreas , con matrícula \ninmobiliaria No. 028 -16030— colinda con otros lotes adquiridos dentro del mismo \nproceso sucesoral por la señora AZUCENA y sus dos hijos. Entre ellos se encuentra \nel predio con mayor área de extensión , identificado con el número de matrícula \ninmobiliaria No. 028 -8888 y señalado en el plano con color salmón (o rosado), \ncorrespondiente al Área 483200100000900047. Sobre este predio, la señora \nAzucena ostenta el 50",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 3,
+        "score": 0.47224289178848267
+      },
+      {
+        "text_snippet": "que ha sido la persona a quien mi representada ha arrendado en diversas \noportunidades el predio objeto de esta acción, para su destinación al engorde \ny explotación ganadera, p or lo cual conoce de primera mano el ejercicio \nposesorio y la destinación productiva del bien. No cuenta con correo \nelectrónico.",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 7,
+        "score": 0.47563299536705017
+      },
+      {
+        "text_snippet": "CONTRATO DE PRESTACIÓN DE SERVICIOS PROFESIONALES DE \nABOGADO \nEntre: \nAZUCENA SALAZAR BETANCUR, mayor de edad, identificada con cédula de \nciudadanía No.  32.537.262 de Manizales, domiciliada en dicha ciudad, en \nadelante \"LA MANDANTE\"; y \nJUAN JOSÉ ECHEVERRY FRANCO, mayor de edad, identificado con cédula \nNo. 1.053.841.705 de Manizales, titular de la Tarjeta Profesional de Abogado \nNo. 374.254 del Consejo Superior de la Judicatura, domiciliado en Manizales, en \nadelante \"EL APODERADO\". \nAmbas ",
+        "source": "Contrato.pdf",
+        "page": 0,
+        "score": 0.47796568274497986
+      },
+      {
+        "text_snippet": "el número de matrícula 028-0016030.  \nLA TRADICIÓN: el anterior inmueble fue adjudicado a la señora AZUCENA \nSALAZAR BETANCUR, a través de la SUCESIÓN del causante MARIO \nJARAMILLO GÓMEZ , mediante escritura pública número 2.061 del 2 0 de \noctubre de 1995 otorgada en la Notaría Quinta del Círculo de Manizales.  \nAVALÚO: Se encuentra avaluado catastralmente en la suma de SETENTA Y SIETE \nMILLONES CUATROCIENTOS VEINTISÉIS MIL PESOS ($77.426.000), según \nconsta por certificación expedida por la al",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 1,
+        "score": 0.4782409369945526
+      }
+    ],
+    "confidence": "alta",
+    "cross_references": [],
+    "missing_info": "No se especifican los artículos legales o normativas involucradas en el proceso sucesoral.",
+    "response_time": "9.10s",
+    "timestamp": 1763846641,
+    "cached": true
+  },
+  "bbad87487aac7a773db8385e8170fddf0d7cc59e18fdf8a6ecf9502f2679040d": {
+    "response": "La señora Azucena Salazar Betancur solicita la adjudicación del 50% del dominio proindiviso del inmueble de Francisco Javier Londoño Escalante, basándose en la prescripción adquisitiva de dominio. Ha ejercido posesión exclusiva, pacífica e ininterrumpida del predio desde el 20 de octubre de 1995, superando el plazo de diez años establecido en el Art. 2532 del Código Civil.",
+    "key_points": [
+      "La posesión de Azucena es material y pacífica desde 1995, cumpliendo los requisitos del Art. 2532 del Código Civil.",
+      "Ha realizado actos de explotación económica del bien, arrendándolo para engorde de ganado.",
+      "Es responsable del pago de impuestos del inmueble, evidenciando su vínculo con la propiedad."
+    ],
+    "specific_articles": [
+      "Art. 2532 del Código Civil"
+    ],
+    "exact_quotes": [
+      "\"La señora AZUCENA SALAZAR BETANCUR inició la posesión de la totalidad del predio desde el 20 de octubre de 1995\"",
+      "\"...más de 29 años y 6 meses.\""
+    ],
+    "sources": [
+      {
+        "text_snippet": "que ha sido la persona a quien mi representada ha arrendado en diversas \noportunidades el predio objeto de esta acción, para su destinación al engorde \ny explotación ganadera, p or lo cual conoce de primera mano el ejercicio \nposesorio y la destinación productiva del bien. No cuenta con correo \nelectrónico.",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 7,
+        "score": 0.4348885118961334
+      },
+      {
+        "text_snippet": "JUAN JOSÉ ECHEVERRY FRANCO  \n  ABOGADO  \nUNIVERSIDAD DE CALDAS  \nLa explotación económica del bien inmueble en la que ha incurrido mi representada \nse hace evidente con los contratos verbales de arrendamiento que ha celebrado, en \nmúltiples ocasiones.  \n \nV. PRETENSIONES \nCon toda deferencia y respeto, ruego a su señoría acceder a las siguientes \npretensiones: \n \nPRIMERO: ADJUDICAR y DECLARAR dueña del 50% del dominio que se \nencuentra en común y proindiviso en cabeza del señor FRANCISCO JAVIER ",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 6,
+        "score": 0.4529666304588318
+      },
+      {
+        "text_snippet": "Mi poderdante ha ejercido la posesión exclusiva, continua y pacífica sobre la \ntotalidad del inmueble, excluyendo a los demás comuneros o a quienes tuvieran \nvocación hereditaria para sucederlo, por el término exigido para la prescripción \nextraordinaria adquisitiva de dominio. Durante este tiempo, ha realizado actos de \nexplotación material del predio en atención a su propio interés, sin que haya",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 4,
+        "score": 0.46284398436546326
+      },
+      {
+        "text_snippet": "JUAN JOSÉ ECHEVERRY FRANCO  \n  ABOGADO  \nUNIVERSIDAD DE CALDAS  \ninterrogatorio de parte que le formularé respecto de los hechos que han dado lugar \na la presente acción. \n \n \nVII. ANEXOS \n- Poder para actuar. \n- Solicitud de medida cautelar.  \n \n \nVIII. JURAMENTO \n \nBajo la gravedad de juramento manifiesto al despacho que ni mi poderdante, ni el \nsuscrito abogado conocemos la identidad o dirección de notificación de los \nherederos determinados e indeterminados del señor  FRANCISCO JAVIER \nLONDO",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 9,
+        "score": 0.4667152762413025
+      },
+      {
+        "text_snippet": "JUAN JOSÉ ECHEVERRY FRANCO  \n  ABOGADO  \nUNIVERSIDAD DE CALDAS  \nmediado acuerdo con otros comuneros, ni disposición judicial o administrativa que \nhabilitara dicha ocupación.  \nSe cumplen en la hoy demandante todos y cada uno de los postulados del artículo \nprecitado, facultándola así, como dueña del dominio que es ya del 50% del bien, a \npedir que se le sea entregado judicialmente la otra mitad del dominio.  \n \nDEL TIEMPO DE LA POSESIÓN PARA EL PROCESO DE PERTENENCIA  \n \nEstablece el artículo ",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 5,
+        "score": 0.4680987596511841
+      },
+      {
+        "text_snippet": "del doble del tiempo mínimo que requiere la ley. La señora AZUCENA SALAZAR \nBETANCUR inició la posesión de la totalidad del predio desde el 20 de octubre de \n1995 y hasta el momento de la redacción de esta demanda se ha mantenido, \nacumulando de manera ininterrumpida una posesión , con las características ya \ntantas veces mencionadas, más de 29 años y 6 meses.  \n \nDEL ÁNIMO DE SEÑORA Y DUEÑA SOBRE EL BIEN INMUEBLE QUE SE \nPRETENDE USUCAPIR  \nDurante el tiempo en que ha ejercido la posesión exclu",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 5,
+        "score": 0.47273722290992737
+      },
+      {
+        "text_snippet": "SÉPTIMO: Como despliegue de su señorío y muestra del domino que ostenta sobre \nel inmueble, la señora demandante a lo largo de la posesión que ha venido \nejerciendo, económica y materialmente la totalidad del mismo. Como consecuencia \nde lo anterior, ha venido sufragando los gastos, mantenimiento e impuestos que \nrecaen sobre la totalidad del lote. \n \nOCTAVO: Es la parte actora y únicamente ella, la que sufraga la totalidad del precio \ndel impuesto predial año tras año, comportamiento siempre re",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 2,
+        "score": 0.47764480113983154
+      },
+      {
+        "text_snippet": "CONTRATO DE PRESTACIÓN DE SERVICIOS PROFESIONALES DE \nABOGADO \nEntre: \nAZUCENA SALAZAR BETANCUR, mayor de edad, identificada con cédula de \nciudadanía No.  32.537.262 de Manizales, domiciliada en dicha ciudad, en \nadelante \"LA MANDANTE\"; y \nJUAN JOSÉ ECHEVERRY FRANCO, mayor de edad, identificado con cédula \nNo. 1.053.841.705 de Manizales, titular de la Tarjeta Profesional de Abogado \nNo. 374.254 del Consejo Superior de la Judicatura, domiciliado en Manizales, en \nadelante \"EL APODERADO\". \nAmbas ",
+        "source": "Contrato.pdf",
+        "page": 0,
+        "score": 0.47797414660453796
+      }
+    ],
+    "confidence": "alta",
+    "cross_references": [],
+    "missing_info": "",
+    "response_time": "7.26s",
+    "timestamp": 1763846658,
     "cached": true
   }
 }
