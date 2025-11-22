@@ -168,15 +168,47 @@ let loadingInterval;
 
 function startLoadingAnimation() {
   let dotCount = 0;
+  let messageIndex = 0;
+  const loadingMessages = [
+    'Procesando',
+    'Analizando documentos',
+    'Buscando información',
+    'Preparando respuesta'
+  ];
+  
   loadingInterval = setInterval(() => {
     const dotsElement = document.querySelector('.loading-dots .dots');
-    if (dotsElement) {
+    const messageElement = document.querySelector('.loading-dots');
+    
+    if (dotsElement && messageElement) {
       dotCount = (dotCount + 1) % 4;
       dotsElement.textContent = '.'.repeat(dotCount);
+      
+      // Cambiar mensaje cada 3 segundos
+      if (dotCount === 0) {
+        messageIndex = (messageIndex + 1) % loadingMessages.length;
+        messageElement.firstChild.textContent = loadingMessages[messageIndex];
+      }
     } else {
       clearInterval(loadingInterval);
     }
-  }, 500);
+  }, 400);
+}
+
+// Función para simular typing effect en respuestas largas
+function typeWriterEffect(element, text, speed = 30) {
+  element.innerHTML = '';
+  let i = 0;
+  
+  const typeTimer = setInterval(() => {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      messages.scrollTop = messages.scrollHeight;
+    } else {
+      clearInterval(typeTimer);
+    }
+  }, speed);
 }
 
 function appendMessage(who, text, cls, isCached = false, messageId = null) {

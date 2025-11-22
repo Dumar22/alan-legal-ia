@@ -60,7 +60,7 @@
 ## 🛠️ Tecnologías Utilizadas
 
 - **Backend**: Flask, Python 3.8+
-- **IA/ML**: OpenAI GPT-4o-mini, LangChain, FAISS
+- **IA/ML**: OpenAI GPT-4o, LangChain, FAISS
 - **Base de datos**: Supabase (PostgreSQL)
 - **Frontend**: HTML5, CSS3, JavaScript Vanilla
 - **Vectorización**: OpenAI Embeddings

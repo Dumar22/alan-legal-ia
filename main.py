@@ -276,7 +276,7 @@ def get_conversation_history(limit: int = 10):
 # ==========================================================
 try:
     test = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         messages=[{"role": "user", "content": "Hola, ¿funcionas?"}]
     )
     print("OpenAI funcionando →", test.choices[0].message.content)
@@ -312,16 +312,19 @@ def procesar_documento(file_path, filename=""):
         total_chars = sum(len(doc.page_content) for doc in docs)
         print(f"📊 Documento cargado: {total_chars:,} caracteres")
         
-        # Chunking optimizado - tamaño dinámico basado en el documento
-        if total_chars < 10000:  # Documento pequeño
-            chunk_size = 600
+        # Chunking ultra-optimizado para velocidad
+        if total_chars < 5000:  # Documento muy pequeño
+            chunk_size = 400
+            chunk_overlap = 30
+        elif total_chars < 20000:  # Documento pequeño
+            chunk_size = 600 
             chunk_overlap = 50
         elif total_chars < 50000:  # Documento mediano
-            chunk_size = 800 
-            chunk_overlap = 100
+            chunk_size = 900
+            chunk_overlap = 80
         else:  # Documento grande
-            chunk_size = 1000
-            chunk_overlap = 150
+            chunk_size = 1200  # Chunks más grandes para menos procesamiento
+            chunk_overlap = 100
             
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size, 
@@ -671,22 +674,31 @@ def chat():
             except Exception:
                 derived_confidence = "baja"
 
-            # Prompt optimizado para respuestas concretas y específicas
+            # Prompt optimizado para respuestas estrictas basadas únicamente en el contexto
             prompt_template = """
-Eres un asistente legal experto. Proporciona respuestas CONCRETAS, ESPECÍFICAS y DIRECTAS usando ÚNICAMENTE el CONTEXTO proporcionado.
+Eres Alana Legal Sense, asistente legal especializada. REGLAS ESTRICTAS DE RESPUESTA:
+
+🚫 PROHIBIDO ABSOLUTO:
+- Inventar, asumir o extrapolar información no presente en el contexto
+- Usar conocimiento general legal no contenido en los documentos
+- Hacer inferencias o deducciones no explícitas
+- Proporcionar interpretaciones personales
+
+✅ SOLO PERMITIDO:
+- Responder con información EXPLÍCITAMENTE contenida en el contexto
+- Citar textualmente fragmentos relevantes
+- Mencionar artículos/secciones que aparezcan literalmente
+- Indicar claramente cuando falta información específica
+
+INSTRUCCIÓN CRÍTICA:
+Si no encuentras la respuesta específica en el contexto proporcionado, debes responder:
+"La respuesta específica a esta pregunta no se encuentra en los documentos legales cargados"
 
 FORMATO DE RESPUESTA REQUERIDO:
-✅ CONCISIÓN: Máximo 3-4 párrafos, directo al punto
-✅ ESPECIFICIDAD: Menciona artículos, secciones, números exactos cuando estén disponibles
-✅ ESTRUCTURA: Organiza la respuesta con puntos clave numerados si es complejo
-✅ EVIDENCIA: Incluye citas textuales exactas entre comillas
-✅ CONEXIONES: Si hay información relacionada en diferentes secciones, conéctala claramente
-
-REGLAS ESTRICTAS:
-- NO uses frases genéricas como "según el documento" - SÉ ESPECÍFICO
-- NO repitas información - SINTETIZA
-- SI no hay información suficiente: indica QUÉ información específica falta
-- SIEMPRE incluye números de artículo/sección cuando estén disponibles
+✅ PRECISIÓN: Solo información textual del contexto
+✅ CITAS EXACTAS: Entre comillas con referencia precisa
+✅ CLARIDAD: Indica qué se encuentra y qué no se encuentra
+✅ CONSERVADOR: Mejor decir "no está" que asumir
 
 Devuelve ÚNICAMENTE un objeto JSON válido:
 {{
@@ -712,9 +724,9 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
 
             try:
                 ai_response = client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "Eres un asistente útil y preciso. Responde en JSON según lo solicitado."},
+                        {"role": "system", "content": "Eres Alana Legal Sense. CRÍTICO: Solo responde si la información está explícitamente en el contexto. Si no encuentras la respuesta específica, indica: 'La respuesta específica a esta pregunta no se encuentra en los documentos legales cargados'. Responde en JSON según lo solicitado."},
                         {"role": "user", "content": prompt}
                     ]
                 )
@@ -750,13 +762,14 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
             if parsed:
                 answer = parsed.get("answer", parsed.get("response", None))
                 
-                # Si el LLM devolvió NO_ENCONTRADO, convertirlo a mensaje más amigable
-                if answer and (answer.strip().upper() == "NO_ENCONTRADO" or "no encuentro" in answer.lower()):
+                # Si el LLM devolvió NO_ENCONTRADO, usar el mensaje específico requerido
+                if answer and (answer.strip().upper() == "NO_ENCONTRADO" or "no encuentro" in answer.lower() or "no se encuentra" in answer.lower()):
                     missing_info = parsed.get("missing_info", "")
+                    base_message = "La respuesta específica a esta pregunta no se encuentra en los documentos legales cargados"
                     if missing_info:
-                        answer = f"No encuentro información específica sobre esa consulta. Necesitaría más detalles sobre: {missing_info}"
+                        answer = f"{base_message}. Para responder necesitaría información sobre: {missing_info}"
                     else:
-                        answer = "Lo siento, no encuentro información específica sobre esa consulta en el documento actual. ¿Podrías ser más específico?"
+                        answer = base_message
                 
                 # Extraer nueva estructura de respuesta
                 key_points = parsed.get("key_points", [])
@@ -796,15 +809,15 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
                 m = re.search(r'"answer"\s*:\s*"([^"]+)"', text_ans)
                 if m:
                     text_only = m.group(1)
-                    # Convertir NO_ENCONTRADO a mensaje amigable
+                    # Usar mensaje específico requerido para NO_ENCONTRADO
                     if text_only.strip().upper() == "NO_ENCONTRADO":
-                        text_only = "Lo siento, no encuentro información específica sobre esa consulta en el documento actual. ¿Podrías reformular tu pregunta?"
+                        text_only = "La respuesta específica a esta pregunta no se encuentra en los documentos legales cargados"
                 else:
                     # quitar saltos y limitar longitud
                     text_only = text_ans[:2000]
-                    # Si contiene NO_ENCONTRADO, reemplazarlo
-                    if "NO_ENCONTRADO" in text_only.upper():
-                        text_only = "Lo siento, no encuentro información específica sobre esa consulta en el documento actual. ¿Podrías ser más específico sobre lo que buscas?"
+                    # Si contiene NO_ENCONTRADO, usar mensaje específico
+                    if "NO_ENCONTRADO" in text_only.upper() or "no encuentro" in text_only.lower():
+                        text_only = "La respuesta específica a esta pregunta no se encuentra en los documentos legales cargados"
 
                 payload = {"response": text_only, "sources": sources, "confidence": derived_confidence}
                 return respond_and_cache(cache_key, payload)
@@ -817,9 +830,9 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
     # ==========================================================
     try:
         ai_response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[
-                {"role": "system", "content": "Eres un asistente amable y útil."},
+                {"role": "system", "content": "Eres Alana Legal Sense, una asistente legal. IMPORTANTE: Solo puedes responder con información legal general. Para consultas específicas necesitas que el usuario suba documentos legales relevantes."},
                 {"role": "user", "content": user_text}
             ]
         )
@@ -878,7 +891,7 @@ def optimize_system_startup():
         if OPENAI_KEY:
             try:
                 test_response = client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model="gpt-4o",
                     messages=[{"role": "user", "content": "Hi"}],
                     max_tokens=5,
                     timeout=5
