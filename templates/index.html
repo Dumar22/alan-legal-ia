@@ -11,17 +11,36 @@
   <div id="chatbox">
     <div class="top-row">
       <div class="uploader">
-        <h3>📄 Cargar documento</h3>
+        <h3>📄 Cargar documentos</h3>
         <form id="uploadForm" enctype="multipart/form-data">
-          <input type="file" id="fileInput" name="file" accept=".pdf,.txt,.docx" />
-          <button type="submit">Subir</button>
+          <div class="file-input-container">
+            <input type="file" id="fileInput" name="files" 
+                   accept=".pdf,.txt,.docx" 
+                   multiple 
+                   max-files="3" />
+            <label for="fileInput" class="file-label">
+              📁 Seleccionar archivos (máx. 3)
+            </label>
+          </div>
+          <div id="filesList" class="files-list"></div>
+          <div class="upload-info">
+            <small>Máximo 3 archivos • 16MB por archivo • Formatos: PDF, TXT, DOCX</small>
+          </div>
+          <button type="submit" id="uploadBtn" disabled>Subir archivos</button>
         </form>
         <div id="uploadStatus" class="status"></div>
+        <div id="uploadProgress" class="progress-container" style="display: none;">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <span class="progress-text">Procesando...</span>
+        </div>
       </div>
       <div class="info">
         <h2>🤖 Chatbot</h2>
         <div class="meta">
           <div id="confidenceBadge" class="badge">Confianza: —</div>
+          <button id="historyBtn" class="history-btn">📋 Historial</button>
         </div>
       </div>
     </div>
@@ -36,6 +55,15 @@
     <div id="sourcesContainer" class="sources">
       <h4>Fuentes</h4>
       <div id="sourcesList"></div>
+    </div>
+  </div>
+
+  <!-- Modal de historial -->
+  <div id="historyModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>📋 Historial de Conversaciones</h3>
+      <div id="historyList"></div>
     </div>
   </div>
 
