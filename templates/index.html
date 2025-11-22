@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gemini Clone</title>
+  <title>Alana Legal Sense - Asistente Jurídico Inteligente</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -13,10 +13,10 @@
   <aside class="sidebar">
     <div class="sidebar-header">
       <span class="material-symbols-outlined menu-icon">menu</span>
-      <span class="logo-text">ChatDoc</span>
+      <span class="logo-text">Alana Legal Sense</span>
     </div>
 
-    <div class="new-chat-btn" onclick="window.location.reload()">
+    <div class="new-chat-btn" onclick="nuevaConversacion()">
       <span class="material-symbols-outlined">add</span>
       <span>Nuevo chat</span>
     </div>
@@ -116,6 +116,384 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    <script>
+        // Variables globales
+        let currentConversationId = null;
+        let uploadedFiles = [];
+        let isFilesSidebarCollapsed = false;
+        
+        // Función para nueva conversación
+        function nuevaConversacion() {
+            // Limpiar mensajes
+            document.getElementById('messages').innerHTML = '';
+            
+            // Resetear conversación actual
+            currentConversationId = null;
+            
+            // Actualizar selector
+            const select = document.getElementById('conversationSelect');
+            select.value = 'nueva';
+            
+            // Actualizar título
+            document.getElementById('conversationTitle').textContent = 'Nueva Conversación';
+            
+            // Limpiar archivos cargados (opcional)
+            // clearUploadedFiles();
+            
+            // Mensaje de bienvenida
+            addMessage('bot', '¡Hola! Soy Alana, tu asistente legal especializado. ¿En qué puedo ayudarte hoy?');
+        }
+        
+        // Función para cambiar conversación
+        function cambiarConversacion() {
+            const select = document.getElementById('conversationSelect');
+            const value = select.value;
+            
+            if (value === 'nueva') {
+                nuevaConversacion();
+            } else {
+                // Cargar conversación existente
+                loadConversation(value);
+            }
+        }
+        
+        // Función para mostrar historial
+        function mostrarHistorial() {
+            document.getElementById('historialModal').style.display = 'flex';
+            loadHistorial();
+        }
+        
+        // Función para cerrar historial
+        function cerrarHistorial() {
+            document.getElementById('historialModal').style.display = 'none';
+        }
+        
+        // Función para limpiar chat
+        function limpiarChat() {
+            if (confirm('¿Estás seguro de que deseas limpiar el chat actual?')) {
+                document.getElementById('messages').innerHTML = '';
+                addMessage('bot', 'Chat limpiado. ¿En qué puedo ayudarte?');
+            }
+        }
+        
+        // Función para toggle del panel lateral
+        function toggleFilesSidebar() {
+            const sidebar = document.getElementById('filesSidebar');
+            const button = sidebar.querySelector('.btn-icon');
+            
+            isFilesSidebarCollapsed = !isFilesSidebarCollapsed;
+            
+            if (isFilesSidebarCollapsed) {
+                sidebar.style.width = '60px';
+                button.innerHTML = '▶';
+                sidebar.querySelector('.files-header h3').style.display = 'none';
+                sidebar.querySelector('.files-upload-zone').style.display = 'none';
+                sidebar.querySelector('.upload-info').style.display = 'none';
+            } else {
+                sidebar.style.width = '320px';
+                button.innerHTML = '◀';
+                sidebar.querySelector('.files-header h3').style.display = 'block';
+                sidebar.querySelector('.files-upload-zone').style.display = 'block';
+                sidebar.querySelector('.upload-info').style.display = 'block';
+            }
+        }
+        
+        // Función para manejar selección de archivos
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            if (files.length > 0) {
+                uploadFiles(files);
+            }
+        }
+        
+        // Función para carga rápida de archivos
+        function handleQuickFileUpload(event) {
+            const files = Array.from(event.target.files);
+            if (files.length > 0) {
+                uploadFiles(files);
+            }
+        }
+        
+        // Función para subir archivos
+        async function uploadFiles(files) {
+            const indicator = document.getElementById('uploadingIndicator');
+            indicator.style.display = 'flex';
+            
+            const formData = new FormData();
+            files.forEach(file => {
+                formData.append('files', file);
+            });
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateFilesList(result.processed_files || files);
+                    addMessage('bot', result.message || '✅ Archivos procesados correctamente');
+                } else {
+                    addMessage('bot', result.message || '❌ Error al procesar archivos');
+                }
+            } catch (error) {
+                console.error('Error uploading files:', error);
+                addMessage('bot', '❌ Error al cargar archivos. Inténtalo de nuevo.');
+            } finally {
+                indicator.style.display = 'none';
+                // Limpiar inputs
+                document.getElementById('fileInput').value = '';
+                document.getElementById('quickFileInput').value = '';
+            }
+        }
+        
+        // Función para actualizar lista de archivos
+        function updateFilesList(files) {
+            const filesList = document.getElementById('filesList');
+            const noFilesMessage = filesList.querySelector('.no-files-message');
+            
+            if (noFilesMessage) {
+                noFilesMessage.remove();
+            }
+            
+            files.forEach(file => {
+                const fileName = typeof file === 'string' ? file : file.name;
+                const fileSize = typeof file === 'object' && file.size ? file.size : 0;
+                
+                if (!uploadedFiles.find(f => f.name === fileName)) {
+                    uploadedFiles.push({ name: fileName, size: fileSize });
+                    addFileToList(fileName, fileSize);
+                }
+            });
+        }
+        
+        // Función para agregar archivo a la lista
+        function addFileToList(fileName, fileSize) {
+            const filesList = document.getElementById('filesList');
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <div class="file-name" title="${fileName}">${fileName}</div>
+                    <div class="file-size">${formatFileSize(fileSize)}</div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-file-action" onclick="viewFile('${fileName}')" title="Ver detalles">👁</button>
+                    <button class="btn-file-action delete" onclick="removeFile('${fileName}')" title="Eliminar">🗑</button>
+                </div>
+            `;
+            filesList.appendChild(fileItem);
+        }
+        
+        // Función para formatear tamaño de archivo
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Función para eliminar archivo
+        function removeFile(fileName) {
+            if (confirm(`¿Eliminar ${fileName}?`)) {
+                uploadedFiles = uploadedFiles.filter(f => f.name !== fileName);
+                const fileItems = document.querySelectorAll('.file-item');
+                fileItems.forEach(item => {
+                    if (item.querySelector('.file-name').textContent === fileName) {
+                        item.remove();
+                    }
+                });
+                
+                // Si no hay archivos, mostrar mensaje
+                if (uploadedFiles.length === 0) {
+                    const filesList = document.getElementById('filesList');
+                    filesList.innerHTML = `
+                        <div class="no-files-message">
+                            <span class="icon">📄</span>
+                            <p>No hay documentos cargados</p>
+                            <small>Los archivos se cargarán automáticamente al seleccionarlos</small>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        // Función para ver archivo
+        function viewFile(fileName) {
+            document.getElementById('fileDetailsModal').style.display = 'flex';
+            document.getElementById('fileDetails').innerHTML = `
+                <h4>${fileName}</h4>
+                <p>Archivo cargado y procesado correctamente.</p>
+                <p><strong>Estado:</strong> ✅ Disponible para consultas</p>
+            `;
+        }
+        
+        // Función para cerrar detalles de archivo
+        function cerrarDetallesArchivo() {
+            document.getElementById('fileDetailsModal').style.display = 'none';
+        }
+        
+        // Función para manejar Enter en input
+        function handleEnterKey(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                enviarMensaje();
+            }
+        }
+        
+        // Función para enviar mensaje
+        function enviarMensaje() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage('user', message);
+                input.value = '';
+                
+                // Enviar a servidor
+                sendMessage(message);
+            }
+        }
+        
+        // Función para enviar mensaje al servidor
+        async function sendMessage(message) {
+            // Mostrar indicador de escritura
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const result = await response.json();
+                
+                hideTypingIndicator();
+                addMessage('bot', result.response || 'Lo siento, no pude procesar tu mensaje.');
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                hideTypingIndicator();
+                addMessage('bot', '❌ Error de conexión. Inténtalo de nuevo.');
+            }
+        }
+        
+        // Función para agregar mensaje
+        function addMessage(type, content) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = content;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Función para mostrar indicador de escritura
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <span>Alana está escribiendo...</span>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Función para ocultar indicador de escritura
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Función para cargar historial
+        function loadHistorial() {
+            document.getElementById('historialList').innerHTML = '<p>Cargando historial...</p>';
+            // Implementar carga de historial desde servidor
+        }
+        
+        // Función para cargar conversación
+        function loadConversation(conversationId) {
+            // Implementar carga de conversación específica
+            console.log('Cargando conversación:', conversationId);
+        }
+        
+        // Inicialización cuando carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostrar mensaje de bienvenida
+            addMessage('bot', '¡Hola! Soy Alana, tu asistente legal especializado. ¿En qué puedo ayudarte hoy?');
+            
+            // Cerrar modales al hacer clic fuera
+            window.onclick = function(event) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            };
+        });
+        
+        // Función para nueva conversación
+        function nuevaConversacion() {
+            // Limpiar mensajes
+            const messagesContainer = document.getElementById('messages') || 
+                                    document.querySelector('.messages') || 
+                                    document.querySelector('#chat-messages');
+            if (messagesContainer) {
+                messagesContainer.innerHTML = '';
+            }
+            
+            // Mensaje de bienvenida
+            addMessage('bot', '¡Hola! Soy Alana, tu asistente legal especializado. ¿En qué puedo ayudarte hoy?');
+            
+            // Limpiar input si existe
+            const userInput = document.getElementById('userInput') || 
+                             document.querySelector('input[type="text"]');
+            if (userInput) {
+                userInput.value = '';
+                userInput.focus();
+            }
+            
+            console.log('Nueva conversación iniciada');
+        }
+        
+        // Función auxiliar para agregar mensaje si no existe
+        if (typeof addMessage !== 'function') {
+            function addMessage(sender, message) {
+                const messagesContainer = document.getElementById('messages') || 
+                                        document.querySelector('.messages') || 
+                                        document.querySelector('#chat-messages');
+                
+                if (messagesContainer) {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${sender} msg ${sender}`;
+                    messageDiv.innerHTML = `<p>${message}</p>`;
+                    messagesContainer.appendChild(messageDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            }
+        }
+        
+        // Asegurarse de que la función está disponible globalmente
+        window.nuevaConversacion = nuevaConversacion;
+    </script>
 </body>
 </html>

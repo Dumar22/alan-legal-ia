@@ -1,8 +1,36 @@
-# 🤖 Alan Legal IA - Asistente Legal Inteligente con RAG
+# 🏛️ Alana Legal Sense - Asistente Jurídico Inteligente con IA
 
 ## 📋 Descripción
 
-Alan Legal IA es un asistente legal inteligente que utiliza tecnologías de Recuperación Aumentada por Generación (RAG) para analizar documentos jurídicos y responder preguntas basándose únicamente en el contenido de los documentos cargados. El sistema incluye **razonamiento cruzado** para conectar información entre diferentes secciones del documento y persistencia de datos con Supabase.
+**Alana Legal Sense** es un asistente jurídico inteligente de última generación que utiliza IA avanzada para analizar documentos legales y proporcionar respuestas precisas. Integra tecnologías RAG (Retrieval-Augmented Generation) con FAISS, razonamiento cruzado entre documentos, y persistencia de datos con Supabase.
+
+## 🚀 **¡LISTO PARA DESPLEGAR EN PRODUCCIÓN!**
+
+### 🌐 Despliegue Recomendado: [Render.com](https://render.com)
+- ✅ **Gratis** para proyectos públicos  
+- ✅ **Integración directa con GitHub**
+- ✅ **Despliegue automático** en cada push
+- ✅ **HTTPS incluido** automáticamente
+- ✅ **Variables de entorno seguras**
+
+### 📋 Pasos Rápidos de Despliegue:
+1. **Fork** este repositorio en GitHub
+2. **Crear cuenta** en [render.com](https://render.com)  
+3. **Nuevo Web Service** → Conectar repositorio
+4. **Configurar variables de entorno**:
+   ```
+   OPENAI_API_KEY=tu_clave_aqui
+   SUPABASE_URL=tu_url_supabase
+   SUPABASE_ANON_KEY=tu_clave_supabase
+   FLASK_ENV=production
+   ```
+5. **¡Desplegar!** Tu app estará en: `https://alana-legal-sense.onrender.com`
+
+### 📁 Archivos de Despliegue Incluidos:
+- ✅ `Procfile` - Comando de inicio
+- ✅ `build.sh` - Script de construcción  
+- ✅ `runtime.txt` - Python 3.11
+- ✅ `DEPLOYMENT.md` - Guía completa
 
 ## ✨ Características Principales
 

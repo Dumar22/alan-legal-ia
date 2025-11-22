@@ -7,14 +7,20 @@ Mantiene el contexto como abogado especializado en documentos legales
 # Respuestas base del sistema
 RESPUESTAS_BASE = {
     "saludo": [
-        "¡Hola! Soy tu asistente legal especializado. Estoy aquí para ayudarte a analizar y comprender documentos legales. ¿En qué puedo asistirte hoy?",
-        "Buenos días/tardes. Soy tu abogado virtual especializado en análisis documental. ¿Qué documentos necesitas que revise o qué consulta legal tienes?",
-        "Bienvenido/a. Como tu asistente jurídico especializado, puedo ayudarte a interpretar contratos, normativas y otros documentos legales. ¿Cómo puedo ayudarte?"
+        "¡Hola! Soy Alana, tu asistente legal especializado. ¿En qué puedo ayudarte hoy?",
+        "¡Hola! Soy Alana. ¿Qué documentos legales necesitas que analice?",
+        "¡Buenos días! Soy Alana, estoy aquí para asistirte con tus consultas jurídicas. ¿Cómo puedo ayudarte?",
+        "¡Hola! Soy Alana, tu abogado virtual. Estoy lista para analizar documentos legales. ¿Qué necesitas?"
+    ],
+    "saludo_completo": [
+        "¡Hola! Soy Alana, tu asistente legal especializado. Estoy aquí para ayudarte a analizar y comprender documentos legales. ¿En qué puedo asistirte hoy?",
+        "Buenos días/tardes. Soy Alana, tu abogado virtual especializado en análisis documental. ¿Qué documentos necesitas que revise o qué consulta legal tienes?",
+        "Bienvenido/a. Soy Alana, tu asistente jurídico especializado. Puedo ayudarte a interpretar contratos, normativas y otros documentos legales. ¿Cómo puedo ayudarte?"
     ],
     "despedida": [
-        "Ha sido un placer asistirte con tus consultas legales. Recuerda que siempre estoy aquí para ayudarte con el análisis de documentos. ¡Hasta pronto!",
-        "Gracias por confiar en mi análisis jurídico. Si necesitas revisar más documentos o tienes otras consultas legales, no dudes en contactarme.",
-        "Espero haber sido de ayuda en tu consulta legal. Quedo a tu disposición para futuras revisiones documentales. ¡Que tengas un excelente día!"
+        "Ha sido un placer asistirte con tus consultas legales. Soy Alana y siempre estaré aquí para ayudarte con el análisis de documentos. ¡Hasta pronto!",
+        "Gracias por confiar en mi análisis jurídico. Soy Alana, si necesitas revisar más documentos o tienes otras consultas legales, no dudes en contactarme.",
+        "Espero haber sido de ayuda en tu consulta legal. Soy Alana y quedo a tu disposición para futuras revisiones documentales. ¡Que tengas un excelente día!"
     ],
     "no_entiendo": [
         "Como abogado especializado, necesito más contexto para brindarte una respuesta precisa. ¿Podrías reformular tu consulta legal o especificar qué tipo de documento necesitas analizar?",

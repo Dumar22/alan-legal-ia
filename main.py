@@ -53,6 +53,21 @@ from chatbot.model import build_and_train_model, load_model, predict_cluster
 from chatbot.responses import (get_respuesta_by_tipo, get_respuesta_no_encontrado_inteligente, 
                               RESPUESTAS_CONTEXTUALES, RESPUESTAS_CONFIANZA)
 
+def safe_predict_cluster(text, model, vectorizer):
+    """Función segura para predecir cluster con manejo de errores"""
+    try:
+        return predict_cluster(model, vectorizer, text)
+    except Exception as e:
+        print(f"⚠ Error en predict_cluster: {e}")
+        # Análisis básico de la frase para determinar intención
+        text_lower = text.lower()
+        if any(word in text_lower for word in ['hola', 'hey', 'buenas', 'buenos']):
+            return 0  # saludo
+        elif any(word in text_lower for word in ['adios', 'chao', 'hasta', 'gracias']):
+            return 1  # despedida
+        else:
+            return 5  # no_entiendo
+
 # Procesamiento de documentos
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
@@ -376,8 +391,8 @@ if model is None:
 CLUSTER_TO_RESPONSE_TYPE = {
     0: "saludo",
     1: "despedida", 
-    2: "aclaracion_rol",
-    3: "carga_documentos",
+    2: "no_entiendo",
+    3: "saludo",
     4: "despedida",
     5: "no_entiendo"
 }
@@ -523,19 +538,37 @@ def chat():
     print(f"🔍 Consulta recibida: {user_text[:100]}...")
 
     # Detectar peticiones triviales (saludos, agradecimientos) y manejar localmente
-    lower = user_text.lower()
+    lower = user_text.lower().strip()
     tokens = re.findall(r"\w+", lower)
-    greeting_keywords = {"hola", "buenos", "buenas", "hey", "saludos", "gracias", "adios", "adiós", "chao", "hasta", "luego", "nos", "nos vemos"}
-    if any(tok in greeting_keywords for tok in tokens) or lower in ("hola", "gracias", "buenas", "buenos días", "buenas tardes", "buenas noches", "adiós", "adios", "chao"):
-        # usar el modelo de clústers o respuestas predefinidas para respuestas cortas
-        try:
-            cluster = predict_cluster(model, vectorizer, user_text)
-            # Usar el nuevo sistema de respuestas profesionales
-            response_type = CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")
-            response = get_respuesta_by_tipo(response_type)
-            return jsonify({"response": response})
-        except Exception:
-            return jsonify({"response": "Hola — ¿en qué puedo ayudarte?"})
+    
+    # Saludos específicos
+    greeting_keywords = {"hola", "hey", "saludos"}
+    goodbye_keywords = {"adios", "adiós", "chao", "hasta", "nos vemos"}
+    thanks_keywords = {"gracias", "gracias"}
+    time_greetings = {"buenos días", "buenas tardes", "buenas noches", "buenas"}
+    
+    # Verificar saludos directos
+    if lower in ("hola", "hey", "saludos") or any(lower.startswith(greeting) for greeting in ["hola", "hey"]):
+        return jsonify({"response": get_respuesta_by_tipo("saludo")})
+    
+    # Verificar despedidas
+    elif lower in ("adiós", "adios", "chao", "hasta luego", "nos vemos") or any(tok in goodbye_keywords for tok in tokens):
+        return jsonify({"response": get_respuesta_by_tipo("despedida")})
+    
+    # Verificar saludos de tiempo
+    elif any(greeting in lower for greeting in time_greetings):
+        return jsonify({"response": get_respuesta_by_tipo("saludo")})
+    
+    # Verificar agradecimientos
+    elif any(tok in thanks_keywords for tok in tokens):
+        return jsonify({"response": get_respuesta_by_tipo("despedida")})
+    
+    # Si contiene palabras de saludo pero no es saludo directo, usar clustering
+    elif any(tok in greeting_keywords.union(goodbye_keywords) for tok in tokens):
+        cluster = safe_predict_cluster(user_text, model, vectorizer)
+        response_type = CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")
+        response = get_respuesta_by_tipo(response_type)
+        return jsonify({"response": response})
 
     # Detectar si es una petición de aclaración / simplificación
     clarify_keywords = ["explica", "explicame", "sin tecnicismos", "en otras palabras", "no entiendo", "simplifica", "resumen", "resume", "parafrasea", "más simple", "nivel sencillo"]
@@ -772,10 +805,9 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
     # ==========================================================
     # 3️⃣ Backup con clústers
     # ==========================================================
-    cluster = predict_cluster(model, vectorizer, user_text)
-    response = random.choice(
-        [get_respuesta_by_tipo(CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo"))]
-    )
+    cluster = safe_predict_cluster(user_text, model, vectorizer)
+    response_type = CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")
+    response = get_respuesta_by_tipo(response_type)
     return jsonify({"response": response})
 
 
@@ -806,4 +838,11 @@ def history():
 # 🚀 EJECUTAR SERVIDOR
 # ==========================================================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # Configuración para producción
+    port = int(os.environ.get("PORT", 5000))
+    debug_mode = os.environ.get("FLASK_ENV") != "production"
+    
+    print(f"🚀 Iniciando Alana Legal Sense en puerto {port}")
+    print(f"🔧 Modo debug: {debug_mode}")
+    
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
