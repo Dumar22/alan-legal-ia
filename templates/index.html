@@ -3,70 +3,119 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chatbot Inteligente</title>
+  <title>Gemini Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-  <div id="chatbox">
-    <div class="top-row">
-      <div class="uploader">
-        <h3>📄 Cargar documentos</h3>
-        <form id="uploadForm" enctype="multipart/form-data">
-          <div class="file-input-container">
-            <input type="file" id="fileInput" name="files" 
-                   accept=".pdf,.txt,.docx" 
-                   multiple 
-                   max-files="3" />
-            <label for="fileInput" class="file-label">
-              📁 Seleccionar archivos (máx. 3)
-            </label>
-          </div>
-          <div id="filesList" class="files-list"></div>
-          <div class="upload-info">
-            <small>Máximo 3 archivos • 16MB por archivo • Formatos: PDF, TXT, DOCX</small>
-          </div>
-          <button type="submit" id="uploadBtn" disabled>Subir archivos</button>
-        </form>
-        <div id="uploadStatus" class="status"></div>
-        <div id="uploadProgress" class="progress-container" style="display: none;">
-          <div class="progress-bar">
-            <div class="progress-fill"></div>
-          </div>
-          <span class="progress-text">Procesando...</span>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="material-symbols-outlined menu-icon">menu</span>
+      <span class="logo-text">ChatDoc</span>
+    </div>
+
+    <div class="new-chat-btn" onclick="window.location.reload()">
+      <span class="material-symbols-outlined">add</span>
+      <span>Nuevo chat</span>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Documentos</h3>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="upload-trigger">
+          <input type="file" id="fileInput" name="files" accept=".pdf,.txt,.docx" multiple max-files="3" />
+          <label for="fileInput" class="upload-label">
+            <span class="material-symbols-outlined">upload_file</span>
+            <span>Subir archivos</span>
+          </label>
         </div>
-      </div>
-      <div class="info">
-        <h2>🤖 Chatbot</h2>
-        <div class="meta">
-          <div id="confidenceBadge" class="badge">Confianza: —</div>
-          <button id="historyBtn" class="history-btn">📋 Historial</button>
+        
+        <div id="filesList" class="files-list"></div>
+        
+        <div id="uploadProgress" class="progress-container" style="display: none;">
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+
+        <button type="submit" id="uploadBtn" class="process-btn" disabled>
+          Procesar
+        </button>
+        <div id="uploadStatus" class="status-text"></div>
+      </form>
+    </div>
+
+    <div class="sidebar-section bottom">
+      <button id="historyBtn" class="nav-item">
+        <span class="material-symbols-outlined">history</span>
+        <span>Historial</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    
+    <div class="mobile-header">
+      <span class="logo-text">Gemini Clone</span>
+      <div id="confidenceBadge" class="badge hidden">Confianza: -</div>
+    </div>
+
+    <div id="messages" class="chat-stream">
+      <div class="welcome-screen">
+        <div class="gemini-logo">
+          <span class="material-symbols-outlined sparkle">auto_awesome</span>
+        </div>
+        <h1>Hola, ¿en qué puedo ayudarte?</h1>
+        <p class="subtitle">Sube tus documentos PDF o DOCX para analizarlos.</p>
+        
+        <div class="suggestion-cards">
+          <div class="card">
+            <p>Resumir documento</p>
+            <span class="material-symbols-outlined">summarize</span>
+          </div>
+          <div class="card">
+            <p>Extraer fechas clave</p>
+            <span class="material-symbols-outlined">calendar_today</span>
+          </div>
+          <div class="card">
+            <p>Análisis comparativo</p>
+            <span class="material-symbols-outlined">analytics</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div id="messages" class="messages"></div>
+    <div class="input-container">
+      <form id="chatForm" class="chat-box-wrapper">
+        <div class="input-wrapper">
+          <input type="text" id="userInput" placeholder="Escribe una instrucción aquí" autocomplete="off" />
+          <button type="submit" class="send-btn">
+            <span class="material-symbols-outlined">send</span>
+          </button>
+        </div>
+      </form>
+      <div class="footer-text">
+        La IA puede mostrar información imprecisa, por favor verifica sus respuestas.
+      </div>
+    </div>
 
-    <form id="chatForm" class="chat-form">
-      <input type="text" id="userInput" placeholder="Escribe tu mensaje..." autocomplete="off" />
-      <button type="submit">Enviar</button>
-    </form>
-
-    <div id="sourcesContainer" class="sources">
-      <h4>Fuentes</h4>
+    <div id="sourcesContainer" class="sources-panel hidden">
+      <div class="sources-title">Fuentes consultadas</div>
       <div id="sourcesList"></div>
     </div>
-  </div>
 
-  <!-- Modal de historial -->
+  </main>
+
   <div id="historyModal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
-      <h3>📋 Historial de Conversaciones</h3>
+      <div class="modal-header">
+        <h2>Recientes</h2>
+        <span class="close">&times;</span>
+      </div>
       <div id="historyList"></div>
     </div>
   </div>
 
-   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

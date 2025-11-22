@@ -50,6 +50,8 @@ client = OpenAI(api_key=OPENAI_KEY)
 # ==========================================================
 from chatbot.data import training_data
 from chatbot.model import build_and_train_model, load_model, predict_cluster
+from chatbot.responses import (get_respuesta_by_tipo, get_respuesta_no_encontrado_inteligente, 
+                              RESPUESTAS_CONTEXTUALES, RESPUESTAS_CONFIANZA)
 
 # Procesamiento de documentos
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -368,13 +370,16 @@ model, vectorizer = load_model()
 if model is None:
     model, vectorizer = build_and_train_model(training_data, n_clusters=6)
 
-RESPUESTAS = {
-    0: ["¡Hola! 😊 ¿Cómo estás?", "¡Qué gusto saludarte!", "¿En qué puedo ayudarte hoy?"],
-    1: ["Hasta luego 👋", "Nos vemos pronto.", "¡Cuídate! 😊"],
-    2: ["Soy un asistente virtual creado para ayudarte 💻", "Pregúntame lo que quieras 😉"],
-    3: ["¡Claro! ¿En qué puedo ayudarte?", "Cuéntame tu problema 🤖"],
-    4: ["¡Gracias a ti! ❤️", "Me alegra ser de ayuda 😄"],
-    5: ["Lamento eso 😔, puedo intentarlo nuevamente.", "Parece que algo no salió bien 😅"],
+# Sistema de respuestas profesionales mejorado
+# Las respuestas ahora se manejan desde chatbot/responses.py
+# Mapeo de clusters a tipos de respuesta
+CLUSTER_TO_RESPONSE_TYPE = {
+    0: "saludo",
+    1: "despedida", 
+    2: "aclaracion_rol",
+    3: "carga_documentos",
+    4: "despedida",
+    5: "no_entiendo"
 }
 
 # ==========================================================
@@ -525,7 +530,9 @@ def chat():
         # usar el modelo de clústers o respuestas predefinidas para respuestas cortas
         try:
             cluster = predict_cluster(model, vectorizer, user_text)
-            response = random.choice(RESPUESTAS.get(cluster, ["¡Hola! ¿En qué puedo ayudarte?"]))
+            # Usar el nuevo sistema de respuestas profesionales
+            response_type = CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")
+            response = get_respuesta_by_tipo(response_type)
             return jsonify({"response": response})
         except Exception:
             return jsonify({"response": "Hola — ¿en qué puedo ayudarte?"})
@@ -767,7 +774,7 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
     # ==========================================================
     cluster = predict_cluster(model, vectorizer, user_text)
     response = random.choice(
-        RESPUESTAS.get(cluster, ["No estoy seguro de entender 😅, pero puedo intentarlo otra vez."])
+        [get_respuesta_by_tipo(CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo"))]
     )
     return jsonify({"response": response})
 

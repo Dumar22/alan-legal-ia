@@ -1,44 +1,4 @@
 {
-  "b081baace6c2a816eeb7af86ade838ef22068790bcdcd6d1c4c758ff34ab3788": {
-    "response": "NO_ENCONTRADO",
-    "sources": [],
-    "confidence": "baja",
-    "evidence": [],
-    "timestamp": 1763832297
-  },
-  "fc1cdf0357c6f4bf415f2ddaf47e1faead740db51af1a363b806bb9acb784104": {
-    "response": "NO_ENCONTRADO",
-    "sources": [],
-    "confidence": "baja",
-    "evidence": [],
-    "timestamp": 1763832321
-  },
-  "181eb3b75a707da4c6d7f9329ea7e3e964800f54c538280ca82fa42f53edffee": {
-    "response": "El documento hace referencia a un contrato de prestación de servicios profesionales de abogado entre Azucena Salazar Betancur y Juan José Echeverry Franco.",
-    "sources": [],
-    "confidence": "alta",
-    "evidence": [
-      "Entre: AZUCENA SALAZAR BETANCUR... y JUAN JOSÉ ECHEVERRY FRANCO, mayor de edad, identificado con cédula No. 1.053.841.705 de Manizales...",
-      "celebran el presente contrato bajo las siguientes cláusulas:"
-    ],
-    "timestamp": 1763832443
-  },
-  "117c0e38c2f160d6beb86e534ca24f789175ccfab5d6d13701e2eb129bba967e": {
-    "response": "3.500.000 pesos",
-    "sources": [],
-    "confidence": "alta",
-    "evidence": [
-      "LA MANDANTE pagará a EL APODERADO la suma total de TRES MILLONES QUINIENTOS MIL PESOS ($3.500.000) por los servicios prestados."
-    ],
-    "timestamp": 1763832454
-  },
-  "2302873f91311ad0b1b0c7f68c9a31810b40a73cb842566b0a74b6998fd7dc80": {
-    "response": "NO_ENCONTRADO",
-    "sources": [],
-    "confidence": "baja",
-    "evidence": [],
-    "timestamp": 1763832512
-  },
   "c9d352e14c2b21176a6303715a12ce3f3b9428bc323d4591fd9d968b309aed9b": {
     "response": "Los archivos mencionados en el contexto son documentos legales en formato PDF o TXT que están destinados a ser cargados en un sistema que permite su indexación y análisis. Este sistema busca democratizar el acceso a la información legal, facilitando la búsqueda y comprensión de contenido jurídico por parte de los usuarios, independientemente de su nivel técnico. Se enfatiza que el objetivo es construir un asistente legal inteligente que reciba preguntas en lenguaje natural y proporcione respuestas fundamentadas basadas en el contenido de estos documentos cargados.",
     "sources": [],
@@ -93,5 +53,104 @@
       "La necesidad de citar testigos se relaciona con los hechos mencionados en la demanda."
     ],
     "timestamp": 1763838274
+  },
+  "e1653bac6190f30aac5b334043bc379ce7874ba6f072d3728fe2737e15a5e440": {
+    "response": "El contrato establece los términos de honorarios y condiciones de pago entre LA MANDANTE y EL APODERADO, especificando un total de $3.500.000 en seis cuotas bimestrales. La demanda se centra en la pretensión de adjudicar el 50% del dominio de un bien inmueble a AZUCENA SALAZAR BETANCUR mediante prescripción adquisitiva, argumentando la posesión continua y pacífica. Ambos documentos abordan aspectos legales de derechos sobre propiedades y las compensaciones económicas asociadas.",
+    "key_points": [
+      "Honorarios de $3.500.000, pagaderos en seis cuotas bimestrales de $500.000 (Art. Segunda)",
+      "La demanda busca declarar a AZUCENA como dueña del 50% por prescripción adquisitiva (Sección V)",
+      "Compromisos de confidencialidad y condiciones de terminación del contrato correctamente gestionados (Secciones Séptima y Octava)"
+    ],
+    "specific_articles": [
+      "Art. Segunda",
+      "Sección V",
+      "Sección Séptima",
+      "Sección Octava"
+    ],
+    "exact_quotes": [
+      "\"LA MANDANTE pagará a EL APODERADO la suma total de TRES MILLONES QUINIENTOS MIL PESOS ($3.500.000) por los servicios prestados\"",
+      "\"ruego a su señoría acceder a las siguientes pretensiones: ADJUDICAR y DECLARAR dueña del 50% del dominio\""
+    ],
+    "sources": [
+      {
+        "text_snippet": "demandas, recursos y actuaciones procesales necesarias. \nSEGUNDA: HONORARIOS \nLA MANDANTE pagará a EL APODERADO la suma total de  TRES MILLONES \nQUINIENTOS MIL PESOS ($3.500.000)  por los servicios prestados, distribuidos \nasí: \n• $500.000 al firmar el contrato (anticipo). \n• **3.000.000∗∗en∗∗6cuotasbimestrales∗∗de3.000.000∗∗en∗∗6cuotasbimestra\nles∗∗de500.000 cada una. \nParágrafo 1: El pago se realizará mediante transferencia bancaria a la cuenta \ndesignada por EL APODERADO.  \nParágrafo 2: Como ",
+        "source": "Contrato.pdf",
+        "page": 0,
+        "score": 0.31641173362731934
+      },
+      {
+        "text_snippet": "JUAN JOSÉ ECHEVERRY FRANCO  \n  ABOGADO  \nUNIVERSIDAD DE CALDAS  \nLa explotación económica del bien inmueble en la que ha incurrido mi representada \nse hace evidente con los contratos verbales de arrendamiento que ha celebrado, en \nmúltiples ocasiones.  \n \nV. PRETENSIONES \nCon toda deferencia y respeto, ruego a su señoría acceder a las siguientes \npretensiones: \n \nPRIMERO: ADJUDICAR y DECLARAR dueña del 50% del dominio que se \nencuentra en común y proindiviso en cabeza del señor FRANCISCO JAVIER ",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 6,
+        "score": 0.3214397430419922
+      },
+      {
+        "text_snippet": "SÉPTIMA: CONFIDENCIALIDAD \nAmbas partes se comprometen a mantener  reserva absoluta  sobre toda la \ninformación intercambiada, incluso después de finalizado el contrato. \nOCTAVA: TERMINACIÓN ANTICIPADA \n1. Causales: Incumplimiento grave, fuerza mayor o mutuo acuerdo. \n2. Efectos: LA MANDANTE pagará el 100% de los honorarios pactados. \nNOVENA: MORA Y COBROS JUDICIALES \n1. LA MANDANTE entrará en mora automáticamente si no paga en los plazos \nacordados. \n2. En caso de cobro judicial, LA MANDANTE as",
+        "source": "Contrato.pdf",
+        "page": 1,
+        "score": 0.32591742277145386
+      },
+      {
+        "text_snippet": "DÉCIMA: NOTIFICACIONES \n• LA MANDANTE: Teléfono/correo electrónico (por definir). \n• EL APODERADO: (Datos de contacto por definir). \n(Incluir datos actualizados al firmar). \nDÉCIMA PRIMERA: MÉRITO EJECUTIVO \nEste contrato tiene mérito ejecutivo y podrá hacerse valer ante un juez en caso de \nincumplimiento. \nDÉCIMA SEGUNDA: ACEPTACIÓN \nEl contrato se considerará firmado cuando: \n1. LA MANDANTE envíe un mensaje de WhatsApp aceptando los términos (con \nnombre, cédula y texto explícito). \n2. O cuand",
+        "source": "Contrato.pdf",
+        "page": 2,
+        "score": 0.33105945587158203
+      }
+    ],
+    "confidence": "alta",
+    "cross_references": [
+      "La sección de honorarios (Art. Segunda) se relaciona con la sección de mora y cobros judiciales (Sección Novena), ya que la falta de pago puede generar gastos adicionales."
+    ],
+    "missing_info": "No se presentan detalles adicionales sobre la defensa o puntos de la demanda que podrían ser relevantes.",
+    "response_time": "10.29s",
+    "timestamp": 1763839345,
+    "cached": true
+  },
+  "470e396d25f39c6f2e7c2f60405d513fda16277904e04ba0944aa80047aa5704": {
+    "response": "El archivo aborda diversas cuestiones legales relacionadas con la posesión y el dominio de un predio destinado a la actividad ganadera, arrendado por la parte demandada. Se menciona que el área arrendada es de 7 hectáreas y que la señora Azucena ostenta un 50% del dominio de otro predio mayor, señalando una vinculación entre ambos. Asimismo, se establece que la parte demandante ha ejercido posesión del bien por más de dos décadas, lo que puede ser relevante en una posible acción de usucapión.",
+    "key_points": [
+      "La parte demandante ha arrendado el predio destinado al engorde ganadero, 'conoce de primera mano el ejercicio posesorio y la destinación productiva del bien'.",
+      "El área arrendada de 7 hectáreas colinda con otros lotes adquiridos por Azucena, que posee un 50% de dominio sobre un segundo predio mayor según matrícula No. 028-8888.",
+      "La señora Azucena ha ejercido la posesión del bien por más de dos décadas, 'constituyendo una manifestación adicional de su ánimo de señor y dueña sobre el bien'."
+    ],
+    "specific_articles": [],
+    "exact_quotes": [
+      "'conoce de primera mano el ejercicio posesorio y la destinación productiva del bien'",
+      "'constituyendo una manifestación adicional de su ánimo de señor y dueña sobre el bien'"
+    ],
+    "sources": [
+      {
+        "text_snippet": "que ha sido la persona a quien mi representada ha arrendado en diversas \noportunidades el predio objeto de esta acción, para su destinación al engorde \ny explotación ganadera, p or lo cual conoce de primera mano el ejercicio \nposesorio y la destinación productiva del bien. No cuenta con correo \nelectrónico.",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 7,
+        "score": 0.46903955936431885
+      },
+      {
+        "text_snippet": "anexo con color naranja y denominado como Área de 7 hectáreas , con matrícula \ninmobiliaria No. 028 -16030— colinda con otros lotes adquiridos dentro del mismo \nproceso sucesoral por la señora AZUCENA y sus dos hijos. Entre ellos se encuentra \nel predio con mayor área de extensión , identificado con el número de matrícula \ninmobiliaria No. 028 -8888 y señalado en el plano con color salmón (o rosado), \ncorrespondiente al Área 483200100000900047. Sobre este predio, la señora \nAzucena ostenta el 50",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 3,
+        "score": 0.4691426753997803
+      },
+      {
+        "text_snippet": "CONTRATO DE PRESTACIÓN DE SERVICIOS PROFESIONALES DE \nABOGADO \nEntre: \nAZUCENA SALAZAR BETANCUR, mayor de edad, identificada con cédula de \nciudadanía No.  32.537.262 de Manizales, domiciliada en dicha ciudad, en \nadelante \"LA MANDANTE\"; y \nJUAN JOSÉ ECHEVERRY FRANCO, mayor de edad, identificado con cédula \nNo. 1.053.841.705 de Manizales, titular de la Tarjeta Profesional de Abogado \nNo. 374.254 del Consejo Superior de la Judicatura, domiciliado en Manizales, en \nadelante \"EL APODERADO\". \nAmbas ",
+        "source": "Contrato.pdf",
+        "page": 0,
+        "score": 0.4716871678829193
+      },
+      {
+        "text_snippet": "ostentado tanto el derec ho de dominio como la posesión material del mismo, por \nmás de dos décadas. Este hecho constituye una manifestación adicional de su \nánimo de señor y dueña sobre el bien. \n \nDE LA EXPLOTACIÓN ECONÓMICA DE LA DEMANDANTE SOBRE EL BIEN \nQUE SE PRETENDE USUCAPIR",
+        "source": "DEMANDA DE PRESCRIPCIÓN.pdf",
+        "page": 5,
+        "score": 0.474257230758667
+      }
+    ],
+    "confidence": "alta",
+    "cross_references": [
+      "La relación entre el arrendamiento del predio y la propiedad dual de Azucena sobre su otro predio, lo que puede afectar la usucapión."
+    ],
+    "missing_info": "No se detallan artículos específicos relevantes para el contexto de usucapión o dominio.",
+    "response_time": "9.82s",
+    "timestamp": 1763840146,
+    "cached": true
   }
 }
