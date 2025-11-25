@@ -7,12 +7,18 @@ echo "🚀 Building Alana Legal Sense for production..."
 # Upgrade pip first
 pip install --upgrade pip
 
-# Try production requirements first, fallback to main requirements
-if [ -f requirements.production.txt ]; then
+# Try different requirements files - Render is using requirements.minimal.txt
+if [ -f requirements.minimal.txt ]; then
+    echo "📦 Installing minimal dependencies (Render default)..."
+    pip install -r requirements.minimal.txt
+elif [ -f requirements.production.txt ]; then
     echo "📦 Installing production dependencies..."
-    pip install -r requirements.production.txt
+    pip install -r requirements.production.txt  
+elif [ -f requirements.ultra-minimal.txt ]; then
+    echo "📦 Installing ultra-minimal dependencies..."
+    pip install -r requirements.ultra-minimal.txt
 else
-    echo "📦 Installing dependencies..."
+    echo "📦 Installing full dependencies..."
     pip install -r requirements.txt
 fi
 
