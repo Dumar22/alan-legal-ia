@@ -1,0 +1,12 @@
+# Procfile alternativo para diferentes plataformas de deployment
+# Para Render - opción 1 (recomendado)
+web: gunicorn main:app --config gunicorn.conf.py
+
+# Para Render - opción 2 (simple)
+# web: gunicorn main:app --bind 0.0.0.0:$PORT --workers 2
+
+# Para Render - opción 3 (con app.py)
+# web: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2
+
+# Para desarrollo local
+# web: python main.py

@@ -12,7 +12,11 @@ import hashlib
 from pathlib import Path
 import uuid
 from datetime import datetime
-from supabase import create_client, Client
+try:
+    from supabase import create_client, Client
+except Exception:
+    create_client = None
+    Client = None
 
 # ==========================================================
 # 🔐 VARIABLES DE ENTORNO (CARGAR ANTES DE USAR OPENAI)
@@ -77,6 +81,54 @@ from langchain_community.vectorstores import FAISS
 VECTOR_PATH = "vector_db"
 CACHE_PATH = Path("qa_cache.json")
 VECTOR_DB = None
+VECTOR_DB_LOADING = False
+VECTOR_DB_LOCK = None
+
+# Configuration: timeouts and retries (seconds)
+RAG_TIMEOUT = 8
+GPT_TIMEOUT = 6
+OPENAI_RETRIES = 1
+
+# Helper: call OpenAI with a timeout to avoid long blocking requests
+import concurrent.futures
+import math
+def openai_chat_with_timeout(*, model, messages, timeout=12, retries=1, backoff_factor=1.5):
+    """Call OpenAI chat completion with a timeout and simple retry/backoff.
+
+    - `timeout`: max seconds to wait per attempt
+    - `retries`: number of extra attempts after the first (0 = no retry)
+    - `backoff_factor`: multiplier for sleep between retries
+    Raises TimeoutError on timeout, or the original exception on other errors.
+    """
+    attempt = 0
+    last_exc = None
+    while attempt <= retries:
+        attempt += 1
+        def _call():
+            return client.chat.completions.create(model=model, messages=messages)
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+            fut = ex.submit(_call)
+            try:
+                return fut.result(timeout=timeout)
+            except concurrent.futures.TimeoutError as te:
+                fut.cancel()
+                last_exc = TimeoutError("OpenAI request timed out")
+            except Exception as e:
+                last_exc = e
+
+        # if we will retry, sleep with exponential backoff
+        if attempt <= retries:
+            sleep_sec = backoff_factor ** (attempt - 1)
+            try:
+                time.sleep(min(sleep_sec, 10))
+            except Exception:
+                pass
+
+    # no successful attempt
+    if isinstance(last_exc, TimeoutError):
+        raise last_exc
+    raise last_exc if last_exc is not None else TimeoutError("OpenAI request failed after retries")
 
 
 def load_cache():
@@ -196,19 +248,47 @@ def get_corpus_id():
 
 
 def load_vector_db_if_needed():
-    """Load the FAISS vector DB into the global VECTOR_DB once."""
-    global VECTOR_DB
+    """Ensure the FAISS vector DB is loaded. If not loaded, start a background loader and return
+    the current VECTOR_DB (or None if not loaded yet).
+    Call with background=True to trigger background load without blocking.
+    """
+    global VECTOR_DB, VECTOR_DB_LOADING, VECTOR_DB_LOCK
+    # lazy initialize lock
+    if VECTOR_DB_LOCK is None:
+        import threading
+        VECTOR_DB_LOCK = threading.Lock()
+
+    # if already loaded, return immediately
     if VECTOR_DB is not None:
         return VECTOR_DB
-    try:
-        if os.path.exists(VECTOR_PATH):
-            embeddings = OpenAIEmbeddings(api_key=OPENAI_KEY)
-            VECTOR_DB = FAISS.load_local(VECTOR_PATH, embeddings, allow_dangerous_deserialization=True)
-            print("📂 Vector DB cargado en memoria.")
-            return VECTOR_DB
-    except Exception as e:
-        print("⚠ Error cargando Vector DB en memoria:", e)
-        VECTOR_DB = None
+
+    # if loading already in progress, return None
+    if VECTOR_DB_LOADING:
+        return None
+
+    # start background loader to avoid blocking requests
+    def _bg_load():
+        global VECTOR_DB, VECTOR_DB_LOADING
+        try:
+            VECTOR_DB_LOADING = True
+            if os.path.exists(VECTOR_PATH):
+                embeddings = OpenAIEmbeddings(api_key=OPENAI_KEY)
+                db = FAISS.load_local(VECTOR_PATH, embeddings, allow_dangerous_deserialization=True)
+                with VECTOR_DB_LOCK:
+                    VECTOR_DB = db
+                print("📂 Vector DB cargado en memoria (background).")
+            else:
+                print("⚠ Vector DB no encontrada en disco.")
+        except Exception as e:
+            print("⚠ Error cargando Vector DB en memoria (background):", e)
+            with VECTOR_DB_LOCK:
+                VECTOR_DB = None
+        finally:
+            VECTOR_DB_LOADING = False
+
+    import threading
+    th = threading.Thread(target=_bg_load, daemon=True)
+    th.start()
     return None
 
 
@@ -276,7 +356,7 @@ def get_conversation_history(limit: int = 10):
 # ==========================================================
 try:
     test = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": "Hola, ¿funcionas?"}]
     )
     print("OpenAI funcionando →", test.choices[0].message.content)
@@ -408,10 +488,24 @@ def get_corpus_id():
         print(f"⚠ Error con corpus_id: {e}")
         return f"corpus_{int(time.time())}"
 
-model, vectorizer = load_model()
+# Cargar modelo de clústers de forma tolerante a fallos para pruebas.
+model, vectorizer = None, None
+try:
+    try:
+        model, vectorizer = load_model()
+    except Exception as e:
+        print(f"⚠ Error cargando modelo desde disco: {e}")
+        model, vectorizer = None, None
 
-if model is None:
-    model, vectorizer = build_and_train_model(training_data, n_clusters=6)
+    if model is None:
+        try:
+            model, vectorizer = build_and_train_model(training_data, n_clusters=6)
+        except Exception as e:
+            print(f"⚠ Error entrenando/creando modelo: {e}")
+            model, vectorizer = None, None
+except Exception as e:
+    print(f"⚠ Error inesperado en inicialización del modelo: {e}")
+    model, vectorizer = None, None
 
 # Sistema de respuestas profesionales mejorado
 # Las respuestas ahora se manejan desde chatbot/responses.py
@@ -522,9 +616,10 @@ def upload():
         
         # Recargar vector DB en memoria
         try:
+            # trigger background load (non-blocking)
             load_vector_db_if_needed()
         except Exception as e:
-            print(f"⚠ Error recargando Vector DB: {e}")
+            print(f"⚠ Error iniciando carga de Vector DB en background: {e}")
         
         # Preparar respuesta
         successful = len(processed_files)
@@ -568,35 +663,17 @@ def chat():
     # Detectar peticiones triviales (saludos, agradecimientos) y manejar localmente
     lower = user_text.lower().strip()
     tokens = re.findall(r"\w+", lower)
-    
-    # Saludos específicos
-    greeting_keywords = {"hola", "hey", "saludos"}
-    goodbye_keywords = {"adios", "adiós", "chao", "hasta", "nos vemos"}
-    thanks_keywords = {"gracias", "gracias"}
-    time_greetings = {"buenos días", "buenas tardes", "buenas noches", "buenas"}
-    
-    # Verificar saludos directos
-    if lower in ("hola", "hey", "saludos") or any(lower.startswith(greeting) for greeting in ["hola", "hey"]):
-        return jsonify({"response": get_respuesta_by_tipo("saludo")})
-    
-    # Verificar despedidas
-    elif lower in ("adiós", "adios", "chao", "hasta luego", "nos vemos") or any(tok in goodbye_keywords for tok in tokens):
-        return jsonify({"response": get_respuesta_by_tipo("despedida")})
-    
-    # Verificar saludos de tiempo
-    elif any(greeting in lower for greeting in time_greetings):
-        return jsonify({"response": get_respuesta_by_tipo("saludo")})
-    
-    # Verificar agradecimientos
-    elif any(tok in thanks_keywords for tok in tokens):
-        return jsonify({"response": get_respuesta_by_tipo("despedida")})
-    
-    # Si contiene palabras de saludo pero no es saludo directo, usar clustering
-    elif any(tok in greeting_keywords.union(goodbye_keywords) for tok in tokens):
-        cluster = safe_predict_cluster(user_text, model, vectorizer)
-        response_type = CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")
-        response = get_respuesta_by_tipo(response_type)
-        return jsonify({"response": response})
+    greeting_keywords = {"hola", "buenos", "buenas", "hey", "saludos", "gracias", "adios", "adiós", "chao", "hasta", "luego", "nos", "nos vemos"}
+    if any(tok in greeting_keywords for tok in tokens) or lower in ("hola", "gracias", "buenas", "buenos días", "buenas tardes", "buenas noches", "adiós", "adios", "chao"):
+        # usar el modelo de clústers o respuestas predefinidas para respuestas cortas
+        try:
+            cluster = predict_cluster(model, vectorizer, user_text)
+            # Usar el nuevo sistema de respuestas profesionales
+            response_type = CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")
+            response = get_respuesta_by_tipo(response_type)
+            return jsonify({"response": response})
+        except Exception:
+            return jsonify({"response": "Hola — ¿en qué puedo ayudarte?"})
 
     # Detectar si es una petición de aclaración / simplificación
     clarify_keywords = ["explica", "explicame", "sin tecnicismos", "en otras palabras", "no entiendo", "simplifica", "resumen", "resume", "parafrasea", "más simple", "nivel sencillo"]
@@ -724,9 +801,9 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
 
             try:
                 ai_response = client.chat.completions.create(
-                    model="gpt-4o",
+                    model="gpt-4o-mini",
                     messages=[
-                        {"role": "system", "content": "Eres Alana Legal Sense. CRÍTICO: Solo responde si la información está explícitamente en el contexto. Si no encuentras la respuesta específica, indica: 'La respuesta específica a esta pregunta no se encuentra en los documentos legales cargados'. Responde en JSON según lo solicitado."},
+                        {"role": "system", "content": "Eres un asistente útil y preciso. Responde en JSON según lo solicitado."},
                         {"role": "user", "content": prompt}
                     ]
                 )
@@ -830,15 +907,23 @@ Devuelve ÚNICAMENTE un objeto JSON válido:
     # ==========================================================
     try:
         ai_response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Eres Alana Legal Sense, una asistente legal. IMPORTANTE: Solo puedes responder con información legal general. Para consultas específicas necesitas que el usuario suba documentos legales relevantes."},
+                {"role": "system", "content": "Eres un asistente amable y útil."},
                 {"role": "user", "content": user_text}
             ]
         )
         respuesta_gpt = ai_response.choices[0].message.content
         return jsonify({"response": respuesta_gpt})
-
+    except TimeoutError as e:
+        print("⚠ OpenAI timeout (GPT):", e)
+        # fallback rápido a respuestas por clusters o estático
+        try:
+            cluster = predict_cluster(model, vectorizer, user_text) if model is not None else None
+            response = get_respuesta_by_tipo(CLUSTER_TO_RESPONSE_TYPE.get(cluster, "no_entiendo")) if cluster is not None else "Lo siento, estoy tardando mucho. ¿Puedes intentarlo en unos segundos?"
+            return jsonify({"response": response})
+        except Exception:
+            return jsonify({"response": "Lo siento, estoy tardando mucho. Intenta más tarde."})
     except Exception as e:
         print("⚠ Error con OpenAI:", e)
 
@@ -872,6 +957,19 @@ def history():
     except Exception as e:
         print(f"⚠ Error obteniendo historial: {e}")
         return jsonify({"history": [], "error": "No se pudo obtener el historial"})
+
+
+@app.route('/vector_status', methods=['GET'])
+def vector_status():
+    """Devuelve el estado de la vector DB (cargada / cargando / ausente)."""
+    status = 'not_found'
+    if VECTOR_DB is not None:
+        status = 'loaded'
+    elif VECTOR_DB_LOADING:
+        status = 'loading'
+    else:
+        status = 'absent'
+    return jsonify({"status": status})
 
 
 # ==========================================================

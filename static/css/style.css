@@ -279,6 +279,43 @@ body {
   color: var(--text-main);
 }
 
+/* Mic button styles and listening animation */
+.mic-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  cursor: pointer;
+}
+.mic-btn .material-symbols-outlined { font-size: 20px; }
+.mic-btn.listening {
+  animation: micPulse 1.2s infinite ease-in-out;
+  box-shadow: 0 0 0 0 rgba(26,115,232,0.15);
+}
+@keyframes micPulse {
+  0% { box-shadow: 0 0 0 0 rgba(26,115,232,0.25); transform: scale(1); }
+  50% { box-shadow: 0 0 0 10px rgba(26,115,232,0.06); transform: scale(1.04); }
+  100% { box-shadow: 0 0 0 0 rgba(26,115,232,0.00); transform: scale(1); }
+}
+
+/* Typing / processing animation for bot messages */
+.msg.loading { opacity: 0.95; }
+.msg.loading .content { display: inline-flex; align-items: center; gap: 8px; }
+.typing-dots { display: inline-flex; gap: 4px; align-items: center; }
+.typing-dots span { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; opacity: 0.2; transform: translateY(0); animation: dotBounce 1s infinite linear; }
+.typing-dots span:nth-child(2) { animation-delay: 0.12s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.24s; }
+@keyframes dotBounce {
+  0% { opacity: 0.25; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-6px); }
+  100% { opacity: 0.25; transform: translateY(0); }
+}
+
 .send-btn {
   background: transparent;
   border: none;
